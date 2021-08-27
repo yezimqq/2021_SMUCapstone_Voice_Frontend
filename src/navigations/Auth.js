@@ -1,7 +1,6 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { Login, Signup } from '../screens';
-// import { MaterialIcons } from '@expo/vector-icons';
 import { theme } from '../theme';
 
 const Stack =  createStackNavigator();
@@ -24,7 +23,7 @@ const Auth = () => {
                 name = "Signup" 
                 component = {Signup} 
                 options = {{
-                    headerTitle: "",
+                    headerTitle: "Psycology Consult",
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
                     headerTintColor: 'white',

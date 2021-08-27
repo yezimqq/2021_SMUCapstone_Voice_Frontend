@@ -1,7 +1,8 @@
 const Colors = {
     white: '#ffffff',
     black: '#000000',
-    main: '#ed847a'  // 메인컬러: 핑크
+    main: '#ed847a',  // 메인컬러: 핑크
+    grey: '#5e5e5e',
 };
 
 export const theme = {
@@ -9,5 +10,5 @@ export const theme = {
     statusbarText: Colors.white,
     background: Colors.white,
     headerBackground: Colors.main,
-    headerText: Colors.white
+    headerText: Colors.white,
 };

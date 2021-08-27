@@ -11,7 +11,7 @@ const Login = ({ navigation }) => {
       <View style={styles.inputView} >
         <TextInput
           style={styles.inputText}
-          placeholder="Id"
+          placeholder="아이디"
           placeholderTextColor="#bebebe"
           onChangeText={text => setId(text)} />
       </View>
@@ -19,12 +19,14 @@ const Login = ({ navigation }) => {
         <TextInput
           secureTextEntry
           style={styles.inputText}
-          placeholder="Password"
+          placeholder="비밀번호"
           placeholderTextColor="#bebebe"
           onChangeText={text => setPassword(text)} />
       </View>
     
-      <TouchableOpacity style={styles.loginBtn}>
+      <TouchableOpacity 
+        style={styles.loginBtn}
+        onPress = {() => navigation.navigate('Home')}>
         <Text style={styles.loginText}>로그인</Text>
       </TouchableOpacity>
      <View style={styles.line} />

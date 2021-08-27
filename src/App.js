@@ -4,6 +4,7 @@ import { ThemeProvider } from '@react-navigation/native';
 import { theme } from './theme';
 import Navigation from './navigations';
 
+
 const App = () => {
   return (
     <ThemeProvider theme = {theme}>
