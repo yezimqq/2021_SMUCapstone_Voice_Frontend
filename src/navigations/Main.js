@@ -1,4 +1,5 @@
 import React from 'react';
+import { TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../screens';
@@ -22,16 +23,47 @@ const HomeStack = () => {
                 options = {{
                     headerTitle: "Psycology Consult",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
-            />    
+            />
+
+            <Stack.Screen
+                name = "Diary" 
+                component = {Diary}
+                options = {{
+                    headerTitle: "감정일기",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerLeft: () => {
+                        return null;
+                    },
+                }}
+            /> 
+
+            <Stack.Screen
+                name = "DailyChart" 
+                component = {DailyChart}
+                options = {{
+                    headerTitle: "일별감정통계",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                }}
+            /> 
+
         </Stack.Navigator>
     );
 }
 
-const ChatStack  = () => {
+const VoiceChatStack  = () => {
     return (
         <Stack.Navigator
             initialRouteName = 'ChatList'
@@ -42,9 +74,10 @@ const ChatStack  = () => {
                 options = {{
                     headerTitle: "심리상담채팅",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             />
 
@@ -56,7 +89,7 @@ const ChatStack  = () => {
                     headerTintColor: 'white',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             />    
 
@@ -64,13 +97,42 @@ const ChatStack  = () => {
                 name = "ChatSetting" 
                 component = {ChatSetting}
                 options = {{
-                    headerTitle: "심리상담채팅",
+                    headerTitle: "채팅방 설정",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
+                    headerBackTitleVisible: false,
                 }}
-            />        
+            /> 
+
+            <Stack.Screen
+                name = "AudioStorage" 
+                component = {AudioStorage}
+                options = {{
+                    headerTitle: "음성 저장소",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerBackTitleVisible: false,
+                }}
+            />   
+            <Stack.Screen
+                name = "AudioRecording" 
+                component = {AudioRecording}
+                options = {{
+                    headerTitle: "음성 녹음하기",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerBackTitleVisible: false,
+                }}
+            />     
         </Stack.Navigator>
     );
 }
@@ -86,9 +148,10 @@ const DiaryStack  = () => {
                 options = {{
                     headerTitle: "감정일기",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             /> 
 
@@ -98,9 +161,11 @@ const DiaryStack  = () => {
                 options = {{
                     headerTitle: "감정일기설정",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
+                    headerBackTitleVisible: false,
                 }}
             />    
 
@@ -110,9 +175,11 @@ const DiaryStack  = () => {
                 options = {{
                     headerTitle: "감정일기작성",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
+                    headerBackTitleVisible: false,
                 }}
             />       
         </Stack.Navigator>
@@ -130,9 +197,10 @@ const ChartStack = () => {
                 options = {{
                     headerTitle: "일별감정통계",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             /> 
             <Stack.Screen
@@ -141,9 +209,10 @@ const ChartStack = () => {
                 options = {{
                     headerTitle: "월별감정통계",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                     headerBackTitleVisible: false,
                 }}
             />     
@@ -151,7 +220,7 @@ const ChartStack = () => {
     );
 }
 
-const AudioStack = () => {
+/* const AudioStack = () => {
     return (
         <Stack.Navigator
             initialRouteName = 'AudioStorage'
@@ -160,35 +229,36 @@ const AudioStack = () => {
                 name = "AudioStorage" 
                 component = {AudioStorage}
                 options = {{
-                    headerTitle: "일별감정통계",
+                    headerTitle: "음성 저장소",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             /> 
             <Stack.Screen
                 name = "AudioRecording" 
                 component = {AudioRecording}
                 options = {{
-                    headerTitle: "월별감정통계",
+                    headerTitle: "음성 녹음하기",
                     headerTintColor: 'white',
+                    headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                     headerBackTitleVisible: false,
                 }}
             />     
         </Stack.Navigator>
     );
-}
+} */
 
 const Main = () => {
     return (
         <Tab.Navigator
-            initialRouteName="Feed"
-            tabBarOptions={{
-                activeTintColor: '#ed847a',
+            screenOptions={{
+                tabBarActiveTintColor: '#ed847a',
             }}
         >
             <Tab.Screen 
@@ -207,8 +277,8 @@ const Main = () => {
                 
             />
             <Tab.Screen 
-                name = "심리상담" 
-                component = {ChatStack}
+                name = "음성채팅" 
+                component = {VoiceChatStack}
                 options = {{
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
@@ -217,6 +287,7 @@ const Main = () => {
                             color={color}
                             size={size}
                         />
+                        
                     )
                 }}
                 

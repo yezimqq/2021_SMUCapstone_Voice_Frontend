@@ -2,7 +2,7 @@ import React, { useState }from 'react';
 //import styled from 'styled-components/native';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
-const Signup = () => {
+const Signup = ({ navigation }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmpassword] = useState("");
@@ -34,7 +34,9 @@ const Signup = () => {
             onChangeText={text => setConfirmpassword(text)} />
         </View>
       
-        <TouchableOpacity style={styles.signupBtn}>
+        <TouchableOpacity 
+            style={styles.signupBtn}
+            onPress = {() => navigation.navigate('Login')}>
           <Text style={styles.signupText}>가입하기</Text>
         </TouchableOpacity>
 

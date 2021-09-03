@@ -4,9 +4,9 @@
     "slug": "psycology_cohsult",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/chat_icon.png",
+    "icon": "./assets/custom/chat_icon.png",
     "splash": {
-      "image": "./assets/splash.png",
+      "image": "./assets/custom/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },

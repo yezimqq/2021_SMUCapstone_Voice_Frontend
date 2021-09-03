@@ -4,7 +4,7 @@ import { StyleSheet, Text, View} from 'react-native';
 const DiarySetting = () => {
     return (
         <View style = {styles.container}>
-            <Text>감정일기설정(날짜/시간/이모지)</Text>
+            <Text>감정 선택</Text>
         </View>
     );
 };
