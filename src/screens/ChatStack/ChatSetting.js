@@ -45,7 +45,6 @@ const ChatSetting = ({ navigation }) => {
 
             <View style={styles.inputContainer} >
                 <TextInput
-                    secureTextEntry
                     style={styles.inputText}
                     placeholder="이름"
                     placeholderTextColor="#bebebe"
@@ -75,7 +74,7 @@ const ChatSetting = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={[styles.audioBtn, styles.saveBtn]}
-                onPress = {() => navigation.navigate('Chat')}>
+                onPress={() => navigation.navigate('Chat', {userName: name})}>
                 <Text style={styles.btnText}>저장</Text>
             </TouchableOpacity>
 

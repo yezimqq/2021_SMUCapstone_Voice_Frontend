@@ -1,37 +1,34 @@
-import React, { useEffect, useState } from 'react';
-import { Platform, StyleSheet, Text, View, TouchableOpacity, Image, ScrollView } from 'react-native'; 
-import Icon_1 from 'react-native-vector-icons/Ionicons';
-import Icon_2 from 'react-native-vector-icons/FontAwesome';
+import React, { useEffect } from 'react';
+import { Platform, StyleSheet, Text, View, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native'; 
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import { images } from '../../images';
 
-const date = new Date();
-
-const ChatRoom = ({ profile, name, preview }) => {
-    return (
-        <TouchableOpacity style={styles.chatRoom} onPress={() => alert(date)}>
-            <View style={styles.rowContainer}>
-                <Image source={profile} style={styles.image} />
-                <View style={{ flexDirection: 'column' }}>
-                    <Text style={styles.chatroomText}>{name}</Text>
-                    <Text numberOfLines={1} style={styles.chatroomText}>{preview}</Text>
-                </View>
-            </View>
-        </TouchableOpacity>
-    );
-};
+//예시 data
+const Messages = [
+    {
+        id: '1',
+        userName: '할머니',
+        userProfile: images.normal,
+        messageText: '마음이 너무 아프구나...',
+    },
+    
+    {
+        id: '2',
+        userName: '최준',
+        userProfile: images.blue,
+        messageText: '준이의 가장 찬란했던 순간을 함께 해줘서 고마워요.'
+    }
+]
 
 const ChatList = ({ navigation }) => {
-    const [profile, setProfile] = useState();
-    const [name, setName] = useState();
-    const [preview, setPreview] = useState();
-
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
                 <View style={styles.rowContainer}>
                     <TouchableOpacity
                         onPress = {() => {{navigation.navigate('ChatSetting')}}}>
-                        <Icon_1
+                        <Ionicons
                             name = {Platform.OS === 'ios' ? 'ios-chatbubbles-outline' : 'chatbubbles-outline'}
                             size = {30}
                             color = 'white'
@@ -41,7 +38,7 @@ const ChatList = ({ navigation }) => {
 
                     <TouchableOpacity
                         onPress = {() => {{navigation.navigate('AudioStorage')}}}>
-                        <Icon_2
+                        <FontAwesome
                             name = 'file-audio-o'
                             size = {30}
                             color = 'white'
@@ -51,28 +48,31 @@ const ChatList = ({ navigation }) => {
 
                 </View>
             ),
-            /* 도움말
-            headerLeft: () => {
-                <TouchableOpacity
-                    onPress = {() => {{navigation.navigate('AudioStorage')}}}
-                >
-                <Icon_1
-                    name = {Platform.OS === 'ios' ? 'ios-help-circle-outline' : 'help-circle-outline'}
-                    size = {30}
-                    color = 'white'
-                />
-                </TouchableOpacity>
-            },
-            */
         });
     });
 
     return (
-        <ScrollView source={styles.container}>
-            <ChatRoom profile={images.normal} name="할머니" preview="마음이 너무 아프구나 ..." />
-            <ChatRoom profile={images.blue} name="최준" preview="준이의 가장 찬란했던 순간을 함께 해줘서 고마워요" />
-            {/*<ChatRoom profile={profile} name={name} preview={preview} />*/}
-        </ScrollView>
+        <View style={styles.container}>
+            <FlatList
+                data={Messages}
+                keyExtractor={item=>item.id}
+                renderItem={({item}) => (
+                    <TouchableOpacity 
+                        onPress={() => navigation.navigate('Chat', {userName: item.userName})} 
+                        style={styles.chatRoom}>
+                        <View style={styles.rowContainer}>
+                            <Image source={item.userProfile} style={styles.image} />
+                                <View style={styles.colContainer}>
+                                    <Text style={styles.chatroomText}>{item.userName}</Text>
+                                    <Text numberOfLines={1} style={styles.chatroomText}>{item.messageText}</Text>
+                                    
+                                </View>
+                        </View>
+
+                    </TouchableOpacity>
+                )}
+            />
+        </View>
     );
 };
 
@@ -80,7 +80,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        alignContent: 'center',
         alignItems: 'center',
         justifyContent: 'center',
     },
@@ -89,13 +88,17 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
+    colContainer: {
+        flexDirection: 'column',
+    },
+
     headerIcon: {
         margin: 5,
     },
 
     chatRoom: {
         justifyContent: 'center',
-        width: '100%',
+        width: Dimensions.get('screen').width,
         height: 85,
         borderWidth: 2,
         borderColor: '#5e5e5e',
@@ -116,6 +119,7 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         width: 250,
     }
+
 });
 
 export default ChatList;

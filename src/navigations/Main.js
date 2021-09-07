@@ -64,6 +64,7 @@ const HomeStack = () => {
 }
 
 const ChatStack  = () => {
+    
     return (
         <Stack.Navigator
             initialRouteName = 'ChatList'
@@ -77,20 +78,20 @@ const ChatStack  = () => {
                     headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
+                    },
                 }}
             />
 
             <Stack.Screen
                 name = "Chat" 
                 component = {Chat}
-                options = {{
-                    headerTitle: "채팅방",
+                options = {({route}) => ({
+                    title: route.params.userName,
                     headerTintColor: 'white',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                      },
-                }}
+                    },
+                })}
             />    
 
             <Stack.Screen
@@ -238,6 +239,17 @@ const AudioStack = () => {
 }
 
 const Main = () => {
+    const getTabBarVisibility = (route) => {
+        const routeName = route.state
+             ? route.state.routes[route.state.index].name
+             : '';
+
+        if (routeName === 'Chat') {
+            return false;
+        }
+        return true;
+    }
+
     return (
         <Tab.Navigator
             initialRouteName="Feed"
@@ -256,14 +268,15 @@ const Main = () => {
                             color={color}
                             size={size}
                         />
-                    )
+                    ),
                 }}
                 
             />
             <Tab.Screen 
                 name = "심리상담" 
                 component = {ChatStack}
-                options = {{
+                options = {({route}) => ({
+                    tabBarVisible: getTabBarVisibility(route),
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon
@@ -271,9 +284,9 @@ const Main = () => {
                             color={color}
                             size={size}
                         />
-                    )
-                }}
-                
+                    ),
+                    
+                })}
              />
             <Tab.Screen 
                 name = "감정일기" 
