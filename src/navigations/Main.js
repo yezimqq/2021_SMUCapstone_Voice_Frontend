@@ -3,10 +3,9 @@ import { TouchableOpacity } from 'react-native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../screens';
-import { ChatList, Chat, ChatSetting } from '../screens';
+import { ChatList, Chat, ChatSetting, AudioRecording, AudioStorage } from '../screens';
 import { Diary, DiarySetting, DiaryWrite } from '../screens'; 
 import { DailyChart, MonthlyChart } from '../screens';
-import { AudioRecording, AudioStorage } from '../screens';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 const Stack =  createStackNavigator();
@@ -56,6 +55,9 @@ const HomeStack = () => {
                     headerStyle: {
                         backgroundColor: '#ed847a',
                     },
+                    headerLeft: () => {
+                        return null;
+                    },
                 }}
             /> 
 
@@ -90,6 +92,7 @@ const VoiceChatStack  = () => {
                     headerStyle: {
                         backgroundColor: '#ed847a',
                     },
+                    headerBackTitleVisible: false,
                 }}
             />    
 
@@ -152,6 +155,7 @@ const DiaryStack  = () => {
                     headerStyle: {
                         backgroundColor: '#ed847a',
                     },
+                    
                 }}
             /> 
 
@@ -200,7 +204,7 @@ const ChartStack = () => {
                     headerTitleAlign: 'center',
                     headerStyle: {
                         backgroundColor: '#ed847a',
-                    },
+                      },
                 }}
             /> 
             <Stack.Screen
@@ -213,52 +217,32 @@ const ChartStack = () => {
                     headerStyle: {
                         backgroundColor: '#ed847a',
                     },
-                    headerBackTitleVisible: false,
+                    headerLeft: () => {
+                        return null;
+                    },
                 }}
             />     
         </Stack.Navigator>
     );
 }
 
-/* const AudioStack = () => {
-    return (
-        <Stack.Navigator
-            initialRouteName = 'AudioStorage'
-        >
-            <Stack.Screen
-                name = "AudioStorage" 
-                component = {AudioStorage}
-                options = {{
-                    headerTitle: "음성 저장소",
-                    headerTintColor: 'white',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#ed847a',
-                    },
-                }}
-            /> 
-            <Stack.Screen
-                name = "AudioRecording" 
-                component = {AudioRecording}
-                options = {{
-                    headerTitle: "음성 녹음하기",
-                    headerTintColor: 'white',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#ed847a',
-                    },
-                    headerBackTitleVisible: false,
-                }}
-            />     
-        </Stack.Navigator>
-    );
-} */
-
 const Main = () => {
+    const getTabBarVisibility = (route) => {
+        const routeName = route.state
+             ? route.state.routes[route.state.index].name
+             : '';
+
+        if (routeName === 'Chat') {
+            return false;
+        }
+        return true;
+    }
+
     return (
         <Tab.Navigator
-            screenOptions={{
-                tabBarActiveTintColor: '#ed847a',
+            initialRouteName="Home"
+            tabBarOptions={{
+                activeTintColor: '#ed847a',
             }}
         >
             <Tab.Screen 
@@ -272,14 +256,15 @@ const Main = () => {
                             color={color}
                             size={size}
                         />
-                    )
+                    ),
                 }}
                 
             />
             <Tab.Screen 
-                name = "음성채팅" 
+                name = "심리상담" 
                 component = {VoiceChatStack}
-                options = {{
+                options = {({route}) => ({
+                    tabBarVisible: getTabBarVisibility(route),
                     headerShown: false,
                     tabBarIcon: ({ color, size }) => (
                         <Icon
@@ -287,10 +272,9 @@ const Main = () => {
                             color={color}
                             size={size}
                         />
-                        
-                    )
-                }}
-                
+                    ),
+                    
+                })}
              />
             <Tab.Screen 
                 name = "감정일기" 

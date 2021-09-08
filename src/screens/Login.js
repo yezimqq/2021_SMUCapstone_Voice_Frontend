@@ -3,8 +3,9 @@ import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 const Login = ({ navigation }) => {
-  const [id, setId] = useState("");
-  const [password, setPassword] = useState("");
+  const [id, setId] = useState('');
+  const [password, setPassword] = useState('');
+  
   return (
     <View style={styles.container}>
       <Text style={styles.logo}>Psycology Consult</Text>
@@ -36,6 +37,10 @@ const Login = ({ navigation }) => {
 
     </View>
   );
+}
+
+login = () => {
+    fetch('https')
 }
 const styles = StyleSheet.create({
     container: {

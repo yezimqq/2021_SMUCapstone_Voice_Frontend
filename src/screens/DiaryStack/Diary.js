@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
@@ -25,21 +25,39 @@ const locale = {
     }
 };
 
-//이모지 종류, 색상, 날짜, 일기 내용 전달 받음
-const Box = ({ emoji, color, date, text }) => {
-    return (
-        <View>
-            <View style={styles.status}>
-                <Image source={emoji} style={styles.emoji}/>
-                <Text style={styles.emoji_text}>슬퍼요</Text>
-                <Text style={styles.time_text}>{date.getHours()}시 {date.getMinutes()}분</Text>
-            </View>
-            <View stlye={styles.content}>
-                <Text style={styles.content_text}>{text}</Text>
-            </View>
-        </View>
-    );
+const date = new Date();
+const time = new Date();
+
+const formatDate = (time) => {
+    if (Platform.OS === 'ios')
+        return `${time.getHours()}:${time.getMinutes()}`;
+    else {
+        if (time.getHours() < 12)
+            return `오전 ${time.getHours()}:${time.getMinutes()}`;
+        else
+            return `오후 ${time.getHours()-12}:${time.getMinutes()}`;
+    }    
 };
+
+//예시 data
+const Diarys = [
+    {
+        id: '1',
+        diaryEmoji: images.blue,
+        diaryEmojiName: '우울해요',
+        diaryEmojiColor: '#e8913c', 
+        diaryDate: formatDate(time),
+        diaryText: '오늘은 너무 우울하다. 아침에 늦게 일어나 지각을 했기 때문이다. 선생님께 또 엄청나게 혼났다. 알람을 맞췄는데도 못 듣고 그냥 자버렸다..',
+    },
+    {
+        id: '2',
+        diaryEmoji: images.fantastic,
+        diaryEmojiName: '환상적이에요',
+        diaryEmojiColor: '#54b492',
+        diaryDate: formatDate(time),
+        diaryText: '저녁이 되니 기분이 째진다. 야호'
+    }
+]
 
 const Diary = ({ navigation }) => {
     useEffect(() => {
@@ -61,10 +79,6 @@ const Diary = ({ navigation }) => {
     });
 
     
-    const date = new Date();
-    const [emoji, setEmoji] = useState(images.normal);
-    const [textcolor, setTextcolor] = useState('red');
-    const [content, setContent] = useState("형돈이가 랩을 한다 홍홍홍");
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
@@ -79,22 +93,26 @@ const Diary = ({ navigation }) => {
                 iconContainer={{flex: 0.1}}
                 highlightDateNumberStyle={{color: 'black', fontSize: 20}}
                 highlightDateNameStyle={{color: 'black', fontSize: 15}}
-                daySelectionAnimation={{ type: 'background', highlightColor: '#e0e0e0' }}
+                daySelectionAnimation={{ type: 'background', highlightColor: '#dedede' }}
             />
 
-            <ScrollView source={styles.container}>
+            <FlatList 
+                data={Diarys}
+                keyExtractor={item=>item.id}
+                renderItem={({item}) => (
+                    <View>
+                        <View style={styles.status}>
+                            <Image source={item.diaryEmoji} style={styles.emoji}/>
+                            <Text style={styles.emoji_text}>{item.diaryEmojiName}</Text>
+                            <Text style={styles.time_text}>{item.diaryDate}</Text>
+                        </View>
+                        <View>
+                            <Text style={styles.content_text}>{item.diaryText}</Text>
+                        </View> 
+                    </View>
+                )}
                 
-                {/* Box 컴포넌트 예시 */}
-                <View style={styles.status}>
-                    <Image source={images.blue} style={styles.emoji}/>
-                    <Text style={styles.emoji_text}>슬퍼요</Text>
-                    <Text style={styles.time_text}>{date.getHours()}시 {date.getMinutes()}분</Text>
-                </View>
-                <View>
-                    <Text style={styles.content_text}>이건 일기 내용이다 어쩌구 저쩌구 나랏말싸미 듕귁에 달아 문자와 서로 사맛디 아니홀씨 어린 백성을 니르고져 홀빼이셔도</Text>
-                </View>
-                
-            </ScrollView>
+            />
         </View>
     );
     
@@ -120,17 +138,18 @@ const styles = StyleSheet.create({
     emoji: {
         height: 80,
         width: 80,
-        margin: 20,
+        margin: 15,
     },
 
     emoji_text: {
         fontSize: 30,
         fontWeight: 'bold',
-        color: '#e8913c',
+        color: 'black',
     },
 
     time_text: {
         marginLeft: 10,
+        color: 'grey'
     },
 
     content_text: {

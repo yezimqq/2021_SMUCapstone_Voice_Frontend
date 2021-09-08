@@ -1,12 +1,43 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native'; 
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native'; 
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../images';
 
+import { Audio } from 'expo-av';
+
 // 기능 추가는 아직 안하고, 모든 버튼 alert로 작동만 확인
-const AudioRecording = () => {
+const AudioRecording = ({ navigation }) => {
     const [helpText, setHelpText] = useState('녹음 시작 버튼을 누르고 아래의 문장을 소리내어 읽어주세요.');
-    const [recordBtn, setRecordBtn] = useState('녹음 시작');
+    const [recordBtn, setRecordBtn] = useState('');
+    const [recording, setRecording] = React.useState();
+
+  /*async function startRecording() {
+    try {
+      console.log('Requesting permissions..');
+      await Audio.requestPermissionsAsync();
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      }); 
+      console.log('녹음 시작');
+      const { recording } = await Audio.Recording.createAsync(
+         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+      );
+      setRecording(recording);
+      console.log('녹음 중');
+    } catch (err) {
+      console.error('녹음 실패', err);
+    }
+  }
+
+  async function stopRecording() {
+    console.log('녹음 중지');
+    setRecording(undefined);
+    await recording.stopAndUnloadAsync();
+    const uri = recording.getURI(); 
+    console.log('녹음 종료 및 저장', uri);
+  } */
+
     return (
         <View style = {styles.container}>
             <View style = {styles.helpBox}>
@@ -42,12 +73,13 @@ const AudioRecording = () => {
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style = {styles.recordingBtn}
-                        onPress = {() => setRecordBtn('녹음 중지')}>
+                        onPress = {() => {
+                            setRecordBtn('녹음 중지');}}>
                         <Image 
                             source = {images.recording}
                             style = {styles.imageIcon}
                         />               
-                        <Text style = {styles.btnText}>{recordBtn}</Text>
+                        <Text style = {styles.btnText}>{recording ? '녹음 중지' : '녹음 시작'}</Text>
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Icon
@@ -59,7 +91,7 @@ const AudioRecording = () => {
                 <TouchableOpacity style={styles.finBtn}>
                     <Text 
                         style={styles.btnText}
-                        onPress = {() => alert('녹음 종료')}>녹음 종료</Text>
+                        onPress = {() => navigation.navigate('AudioStorage')}>녹음 종료</Text>
                 </TouchableOpacity>
             </View>
         </View>

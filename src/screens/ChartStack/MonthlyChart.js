@@ -1,6 +1,9 @@
 import React, { useEffect } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'; 
 import Icon from 'react-native-vector-icons/Ionicons';
+//import { images } from '../images';
+//import { VictoryBar, VictoryChart, VictoryLabel } from 'victory-native';
+
 
 const MonthlyChart = ({ navigation }) => {
     useEffect(() => {

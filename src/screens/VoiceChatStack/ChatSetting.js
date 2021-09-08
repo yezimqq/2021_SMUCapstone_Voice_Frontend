@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Platform, StyleSheet, Text, View, Button, Image, TouchableOpacity, TextInput } from 'react-native';
 import { RadioButton } from 'react-native-paper';
 //import { images } from '../../images';
-import * as ImagePicker from 'react-native-image-picker';
+import * as ImagePicker from 'expo-image-picker';
 
 const ChatSetting = ({ navigation }) => {
     const [image, setImage] = useState();
@@ -45,7 +45,6 @@ const ChatSetting = ({ navigation }) => {
 
             <View style={styles.inputContainer} >
                 <TextInput
-                    secureTextEntry
                     style={styles.inputText}
                     placeholder="이름"
                     placeholderTextColor="#bebebe"
@@ -75,7 +74,7 @@ const ChatSetting = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={[styles.audioBtn, styles.saveBtn]}
-                onPress = {() => navigation.navigate('Chat')}>
+                onPress={() => navigation.navigate('Chat', {userName: name})}>
                 <Text style={styles.btnText}>저장</Text>
             </TouchableOpacity>
 
@@ -159,8 +158,7 @@ const styles = StyleSheet.create({
     },
 
     btnText: {
-        fontSize: 18,
-        color: "black",
+        fontSize: 20,
     },
 });
 

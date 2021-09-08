@@ -44,7 +44,7 @@ const DiaryWrite = ({ navigation }) => {
             if (time.getHours() < 12)
                 return `${date.getMonth()+1}월 ${date.getDate()}일  오전 ${time.getHours()}:${time.getMinutes()}`;
             else
-                return `${date.getMonth()+1}월 ${date.getDate()}일  오후 ${time.getHours()}:${time.getMinutes()}`;
+                return `${date.getMonth()+1}월 ${date.getDate()}일  오후 ${time.getHours()-12}:${time.getMinutes()}`;
         }    
     };
 

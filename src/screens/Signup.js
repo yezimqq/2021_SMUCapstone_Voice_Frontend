@@ -1,6 +1,7 @@
 import React, { useState }from 'react';
 //import styled from 'styled-components/native';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+//import AsyncStorage from '@react-native-community/async-storage';
 
 const Signup = ({ navigation }) => {
     const [id, setId] = useState("");
