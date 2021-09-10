@@ -125,10 +125,10 @@ const styles = StyleSheet.create({
         position: 'absolute', 
         bottom: Dimensions.get('screen').height*0.38,
     },
-
+    // chart 위치 기기별로 차이 
     chartPosition: {
         position: 'absolute', 
-        top: Dimensions.get('screen').height*0.02,
+        top: Dimensions.get('screen').height*0.04,
     },
 
     line: { 

@@ -240,9 +240,9 @@ const Main = () => {
 
     return (
         <Tab.Navigator
-            initialRouteName="Home"
-            tabBarOptions={{
-                activeTintColor: '#ed847a',
+            initialRouteName = "Home"
+            screenOptions={{
+                tabBarActiveTintColor: '#ed847a',
             }}
         >
             <Tab.Screen 
@@ -253,8 +253,8 @@ const Main = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon
                             name = 'home'
-                            color={color}
-                            size={size}
+                            color = {color}
+                            size = {size}
                         />
                     ),
                 }}
@@ -269,8 +269,8 @@ const Main = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon
                             name = 'chatbox'
-                            color={color}
-                            size={size}
+                            color = {color}
+                            size = {size}
                         />
                     ),
                     
@@ -284,8 +284,8 @@ const Main = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon
                             name = 'reader-outline'
-                            color={color}
-                            size={size}
+                            color = {color}
+                            size = {size}
                         />
                     )
                 }}
@@ -299,8 +299,8 @@ const Main = () => {
                     tabBarIcon: ({ color, size }) => (
                         <Icon
                             name = 'bar-chart-outline'
-                            color={color}
-                            size={size}
+                            color = {color}
+                            size = {size}
                         />
                     )
                 }}
