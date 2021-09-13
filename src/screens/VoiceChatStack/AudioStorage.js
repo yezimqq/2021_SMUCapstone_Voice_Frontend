@@ -1,8 +1,8 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'; 
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native'; 
 import Icon from 'react-native-vector-icons/AntDesign';
 import TabIcon from 'react-native-vector-icons/Foundation'
-
+import * as MediaLibrary from 'expo-media-library';
 
 const AudioStorage = ({ navigation }) => {
     useEffect(() => {
@@ -21,9 +21,70 @@ const AudioStorage = ({ navigation }) => {
             ),
         });
     });
+
+    const [audioFiles, setAudioFiles] = useState([]);
+    const getPermission = async () => {
+        const permission = await MediaLibrary.getPermissionsAsync();
+        console.log(permission);
+    
+        if (permission.granted) {
+          // we want to get all the audio files
+          getAudioFiles();
+        }
+    
+        if (!permission.canAskAgain && !permission.granted) {
+          console.log("user denied and we can't ask again");
+        }
+    
+        if (!permission.granted && permission.canAskAgain) {
+          const {
+            status,
+            canAskAgain,
+          } = await MediaLibrary.requestPermissionsAsync();
+    
+          if (status === 'denied' && canAskAgain) {
+            //   we are going to display alert that user must allow this permission to work this app
+            // permissionAllert();
+          }
+    
+          if (status === 'granted') {
+            //    we want to get all the audio files
+            getAudioFiles();
+          }
+    
+          if (status === 'denied' && !canAskAgain) {
+            //   we want to display some error to the user
+          }
+        }
+      };
+    
+      const getAudioFiles = async () => {
+        let media = await MediaLibrary.getAssetsAsync({
+          mediaType: 'audio',
+        });
+        console.log(media);
+    
+        media = await MediaLibrary.getAssetsAsync({
+          mediaType: 'audio',
+          first: media.totalCount,
+        });
+    
+        setAudioFiles(media.assets);
+      };
+    
+      useEffect(() => {
+        getPermission();
+      }, []);
+
     return (
         <View style = {styles.container}>
-            <Text>음성 저장소</Text>
+            <FlatList
+                data = {audioFiles}
+                keyExtractor = {item => item.id}
+                renderItem = {({ item }) => (
+                    <Text style={styles.audioTitle}>{item.filename}</Text>
+                )}
+            />
             <TouchableOpacity style={styles.trainBtn}>
                 <Text 
                     style={styles.btnText}
@@ -65,6 +126,11 @@ const styles = StyleSheet.create({
 
     headerIcon: {
         marginRight: 10,
+    },
+
+    audioTitle: {
+        textAlign: 'center',
+        paddingVertical: 20,
     },
 
     trainBtn: {

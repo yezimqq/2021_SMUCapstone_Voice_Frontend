@@ -1,14 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'; 
+import { StyleSheet, Text, View, TouchableOpacity, ScrollView, Dimensions } from 'react-native'; 
 import Icon from 'react-native-vector-icons/Ionicons';
 import ArrowIcon from 'react-native-vector-icons/Feather';
 //import { images } from '../images';
-//import { VictoryBar, VictoryChart, VictoryLabel } from 'victory-native';
+import { VictoryBar, VictoryChart, VictoryStack, VictoryLegend, VictoryAxis } from 'victory-native';
 
-import { StackedBarChart } from 'react-native-chart-kit';
-
-
-// 이모지 컬러
+/* ----- emoji color  ----- */
 const VERYGOOD_COLOR = '#54b492';
 const GOOD_COLOR = '#8dbe41';
 const NORMAL_COLOR = '#64a1d0';
@@ -17,20 +14,11 @@ const VERYBAD_COLOR = '#dc3439';
 
 
 const chartDataColor = [VERYGOOD_COLOR, GOOD_COLOR, NORMAL_COLOR, BAD_COLOR, VERYBAD_COLOR];
-//const defaultChartData = [{ y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 0 }, { y: 100 }];
 
-const chartConfig = {
-    backgroundGradientFrom: "#1E2923",
-    backgroundGradientFromOpacity: 0,
-    backgroundGradientTo: "#08130D",
-    backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
-    strokeWidth: 2, // optional, default 3
-    barPercentage: 0.5,
-    useShadowColorFromDataset: false // optional
-};
 
 const MonthlyChart = ({ navigation }) => {
+
+    /* ----- hearder icon ----- */
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -47,13 +35,13 @@ const MonthlyChart = ({ navigation }) => {
         });
     });
 
-    //const [currentMoodData, setCurrentMoodData] = useState(defaultChartData);
-    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
     
-
-
+    const [currentYear, setCurrentYear] = useState(new Date().getFullYear());
+    const [currentMonth, setCurrentMonth] = useState(new Date().getMonth() + 1); // 1월 => 0이므로, 현재 월은 +1로 
+    
     return (
-        <View style = {styles.container}>
+        <ScrollView style = {styles.container}> 
+            {/* ----- 연도 이동 ----- */}
             <View style = {styles.year}>
                 <TouchableOpacity onPress = {() => setCurrentYear(currentYear-1)}>
                     <ArrowIcon
@@ -72,19 +60,127 @@ const MonthlyChart = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            
+            {/* ----- display chart ----- */}
+            <VictoryChart
+                height = {550}
+                domainPadding ={1}
+            >
+                <VictoryAxis />  
+                <VictoryLegend
+				        orientation = 'horizontal'
+                        x = {5} y = {15}
+				        gutter = {32}
+					    colorScale = {chartDataColor}
+				        data = {[
+                            { name: '매우 좋음' }, 
+                            { name: '좋음' }, 
+                            { name: '보통' }, 
+                            { name: '나쁨' }, 
+                            { name: '매우 나쁨' }
+				        ]}
+				/>
+                
+                <VictoryStack
+                    colorScale={chartDataColor}
+                    style={{ data: { width: 15 } }}
+                    //horizontal ={true}
+                >   
+                    {/* 매우 좋음 data */}
+                    <VictoryBar
+                        data={[
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
 
-            {/*<StackedBarChart
-                style={ { height: 300, } }
-                animate={true}
-                keys={ this.moodSumEachDay.keys }
-                colors={ this.moodSumEachDay.colors }
-                data={ stackedBarChartData }
-                showGrid={ true }
-                contentInset={ { top: 30, bottom: 30 } }
-                valueAccessor={ ({ item, key }) => item[ key ].value }
-            />      */}                     
-        </View>
+                    {/* 좋음 data */}
+                    <VictoryBar
+                        data={[
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
+
+                    {/* 보통 data */}
+                    <VictoryBar
+                        data={[
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
+
+                    {/* 나쁨 data */}
+                    <VictoryBar
+                        data={[
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
+
+                    {/* 매우 나쁨 data */}
+                    <VictoryBar
+                        data={[
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
+                </VictoryStack>
+            </VictoryChart>
+    
+
+            <View style = {styles.line} />
+            {/*<Text style = {styles.title}> {currentMonth} 월 </Text> */}
+        </ScrollView>
     );
 };
 
@@ -92,7 +188,6 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: 'white',
-        justifyContent: 'flex-start',
     },
 
     year: {
@@ -100,9 +195,22 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginTop: 30,
-        marginBottom: 10,
-        padding: 5,
-    }
+    },
+
+    line: { 
+        borderBottomColor: '#bebebe',
+        borderBottomWidth: 1,
+        width: '95%',
+        color: '#bebebe',
+        alignSelf: 'center',
+    },
+
+    title: {
+        marginTop: 30,
+        textAlign: 'center',
+        fontSize: 16,
+        fontWeight: 'bold',
+    },
 });
 
 export default MonthlyChart;

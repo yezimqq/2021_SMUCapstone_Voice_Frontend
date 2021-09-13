@@ -1,42 +1,45 @@
 import React, { useState } from 'react';
-//import styled from 'styled-components/native';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
 
 const Login = ({ navigation }) => {
-  const [id, setId] = useState('');
-  const [password, setPassword] = useState('');
+    const [id, setId] = useState('');
+    const [password, setPassword] = useState('');
   
-  return (
+    return (
     <View style={styles.container}>
-      <Text style={styles.logo}>Psycology Consult</Text>
-      <View style={styles.inputView} >
-        <TextInput
-          style={styles.inputText}
-          placeholder="아이디"
-          placeholderTextColor="#bebebe"
-          onChangeText={text => setId(text)} />
-      </View>
-      <View style={styles.inputView} >
-        <TextInput
-          secureTextEntry
-          style={styles.inputText}
-          placeholder="비밀번호"
-          placeholderTextColor="#bebebe"
-          onChangeText={text => setPassword(text)} />
-      </View>
+        <Text style={styles.logo}>Psycology{'\n'}Consult</Text>
+        <View style={styles.inputView} >
+            <TextInput
+                style={styles.inputText}
+                placeholder="아이디"
+                placeholderTextColor="#bebebe"
+                onChangeText={text => setId(text)} />
+        </View>
+        <View style={styles.inputView} >
+            <TextInput
+                secureTextEntry
+                style={styles.inputText}
+                placeholder="비밀번호"
+                placeholderTextColor="#bebebe"
+                onChangeText={text => setPassword(text)} />
+        </View>
     
-      <TouchableOpacity 
-        style={styles.loginBtn}
-        onPress = {() => navigation.navigate('Home')}>
+        <TouchableOpacity 
+            style={styles.loginBtn}
+            onPress = {() => navigation.navigate('Home')}>
         <Text style={styles.loginText}>로그인</Text>
-      </TouchableOpacity>
-     <View style={styles.line} />
-      <TouchableOpacity onPress = {() => navigation.navigate('Signup')}>
+        </TouchableOpacity>
+        <View style={styles.line} />
+        <TouchableOpacity 
+            style = {styles.signupContainer}
+            onPress = {() => navigation.navigate('Signup')}>
+        <Text style = {styles.verticalBar}>|     </Text>
         <Text style={styles.signupText}>회원가입</Text>
-      </TouchableOpacity>
+        <Text style = {styles.verticalBar}>     |</Text>
+        </TouchableOpacity>
 
     </View>
-  );
+    );
 }
 
 login = () => {
@@ -51,8 +54,8 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        fontWeight: "bold",
-        fontSize: 45,
+        fontWeight: '800',
+        fontSize: 50,
         color: "black",
         marginBottom: 40,
     },
@@ -92,20 +95,30 @@ const styles = StyleSheet.create({
   
     loginText: {
         fontSize: 20,
-        color: "black"
+        color: 'black'
     },
   
     line: { 
-        borderBottomColor: "black",
+        borderBottomColor: '#bebebe',
         borderBottomWidth: 0.5,
-        width: "80%",
-        color: "black"
+        width: '80%',
+        color: '#bebebe'
+    },
+
+    signupContainer: {
+      flexDirection: 'row'
+    },
+
+    verticalBar: {
+      fontSize: 16,
+      color: '#bebebe',
+      marginTop: 8,
     },
 
     signupText: {
         fontSize: 16,
         color: "#3498db",
-        marginTop: 10
+        marginTop: 11
     }
 });
 export default Login;

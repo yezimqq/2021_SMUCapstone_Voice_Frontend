@@ -3,6 +3,7 @@ const Colors = {
     black: '#000000',
     main: '#ed847a',  // 메인컬러: 핑크
     grey: '#5e5e5e',
+    red: '#e84118',
 };
 
 export const theme = {
@@ -11,6 +12,16 @@ export const theme = {
     background: Colors.white,
     headerBackground: Colors.main,
     headerText: Colors.white,
+    errorText: Colors.red,
+
+    // Spinner
+    spinnerBackground: Colors.black,
+    spinnerIndicator: Colors.white,
+
+    // Button(Recording)
+    btnBackground: Colors.white,
+    btnTitle: Colors.black,
+    
 };
 
 /*

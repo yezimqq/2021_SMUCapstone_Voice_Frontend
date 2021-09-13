@@ -7,11 +7,10 @@ import { Audio } from 'expo-av';
 
 // 기능 추가는 아직 안하고, 모든 버튼 alert로 작동만 확인
 const AudioRecording = ({ navigation }) => {
-    const [helpText, setHelpText] = useState('녹음 시작 버튼을 누르고 아래의 문장을 소리내어 읽어주세요.');
-    const [recordBtn, setRecordBtn] = useState('');
-    const [recording, setRecording] = React.useState();
+    const [recording, setRecording] = useState('');
 
-  /*async function startRecording() {
+
+  async function startRecording() {
     try {
       console.log('Requesting permissions..');
       await Audio.requestPermissionsAsync();
@@ -36,29 +35,46 @@ const AudioRecording = ({ navigation }) => {
     await recording.stopAndUnloadAsync();
     const uri = recording.getURI(); 
     console.log('녹음 종료 및 저장', uri);
-  } */
+  } 
 
     return (
         <View style = {styles.container}>
             <View style = {styles.helpBox}>
-                <Text style = {styles.helpText}>{helpText}</Text>
+                <Text style = {styles.helpText}>
+                    {recording? (
+                        '아래 문장 읽기가 끝나면 녹음 중지 버튼을 눌러주세요.'
+                    ) : (
+                        '녹음 시작 버튼을 누르고 아래의 문장을 소리내어 읽어주세요.'
+                    )}       
+                </Text>
             </View>
 
             <View style = {styles.containerTop}> 
-                <Image
-                    source = {images.ear}
-                    style = {styles.earImage}
-                 />
-                 <TouchableOpacity
-                     style = {styles.listenBtn}
-                     onPress = {() => alert('듣기')}>
-                    <Icon
-                        name = 'play-circle-outline'
-                        size = {30}
-                        style = {{marginRight: 10}}
+                {recording? (
+                    <Image
+                        source = {images.wave}
+                        style = {styles.waveImage}
                     />
-                    <Text style = {styles.btnText}>듣기</Text>
-                </TouchableOpacity>
+                ) : (
+                    <Image
+                        source = {images.ear}
+                        style = {styles.earImage}
+                    />
+                )}
+                {recording? (
+                    null
+                ) : (
+                    <TouchableOpacity
+                        style = {styles.listenBtn}
+                        onPress = {() => alert('듣기')}>
+                        <Icon
+                            name = 'play-circle-outline'
+                            size = {30}
+                            style = {{marginRight: 10}}
+                        />
+                        <Text style = {styles.btnText}>듣기</Text>
+                    </TouchableOpacity>
+                )}
             </View>
 
             <View style ={styles.textBox} />
@@ -73,13 +89,23 @@ const AudioRecording = ({ navigation }) => {
                     </TouchableOpacity>
                     <TouchableOpacity 
                         style = {styles.recordingBtn}
-                        onPress = {() => {
-                            setRecordBtn('녹음 중지');}}>
-                        <Image 
-                            source = {images.recording}
-                            style = {styles.imageIcon}
-                        />               
-                        <Text style = {styles.btnText}>{recording ? '녹음 중지' : '녹음 시작'}</Text>
+                        onPress={recording ? stopRecording : startRecording}
+                    >
+                        {recording? (
+                            <Icon
+                                name = 'stop-circle-outline'
+                                size = {32}
+                                marginRight = {10} />
+                        ) : (
+                            <Image 
+                                source = {images.recording}
+                                style = {styles.imageIcon} />
+                        )}              
+                        <Button
+                            title={recording ? '녹음 중지' : '녹음 시작'}
+                            onPress={recording ? stopRecording : startRecording}
+                            color = 'black'
+                        />
                     </TouchableOpacity>
                     <TouchableOpacity>
                         <Icon
@@ -92,6 +118,7 @@ const AudioRecording = ({ navigation }) => {
                     <Text 
                         style={styles.btnText}
                         onPress = {() => navigation.navigate('AudioStorage')}>녹음 종료</Text>
+                        {/*  종료버튼 클릭 시 녹음분 전체 저장  */}
                 </TouchableOpacity>
             </View>
         </View>
@@ -163,6 +190,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
+    waveImage: {
+        width: '90%',
+        height: '70%',
+
+    },
+
     // 녹음 텍스트박스
     textBox: {
         flex: 4,
@@ -217,7 +250,7 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         marginTop: 20,
-        marginBottom: 15,
+        marginBottom: 20,
         shadowColor: 'rgba(0, 0, 0, 0.5)',
         shadowOpacity: 2,
         shadowOffset: {width:2, height:2}

@@ -1,23 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { VictoryChart, VictoryLegend, VictoryLine, VictoryPie } from 'victory-native';
+import { VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryPie, VictoryStack } from 'victory-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { PieChart } from 'react-native-chart-kit';
 import dateFormat from 'dateformat';
 import { ButtonGroup } from 'react-native-elements';
 
-
+/* ----- calendar korean 설정 ----- */
 LocaleConfig.locales['ko'] = {
     monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
     monthNamesShort: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
     dayNames: ['일요일','월요일', '화요일','수요일','목요일','금요일','토요일'],
     dayNamesShort: ['일','월','화','수','목','금','토'],
     today: 'Aujourd\'hui'
-  };
-  LocaleConfig.defaultLocale = 'ko';
+};
+LocaleConfig.defaultLocale = 'ko';
 
-// 이모지 컬러
+/* ----- emoji color  ----- */
 const VERYGOOD_COLOR = '#54b492';
 const GOOD_COLOR = '#8dbe41';
 const NORMAL_COLOR = '#64a1d0';
@@ -47,7 +47,7 @@ Date.prototype.addDays = function(days) {
 
 const DailyChart = ({ navigation }) => {
 
-    // header
+    /* ----- hearder icon ----- */
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -66,16 +66,16 @@ const DailyChart = ({ navigation }) => {
 
     const [currentMoodData, setCurrentMoodData] = useState(defaultChartData);
     const [currentDate, setCurrentDate] = useState(dateFormat(new Date(), 'isoDate'));
-    const [selectedMoodIndex, setSelectedMoodIndex] = useState(0);
+    const [selectedMoodIndex, setSelectedMoodIndex] = useState(0);  
     const [moodGraphData, setMoodGraphData] = useState([]);
 
     const dateMoodData = useRef({
         [currentDate]: {
-            verygood: Math.floor(Math.random()*3),
-			good: Math.floor(Math.random()*3),
-			normal: Math.floor(Math.random()*3),
-            bad: Math.floor(Math.random()*3),
-			verybad: Math.floor(Math.random()*3)
+            verygood: Math.floor(Math.random()*100),
+			good: Math.floor(Math.random()*100),
+			normal: Math.floor(Math.random()*100),
+            bad: Math.floor(Math.random()*100),
+			verybad: Math.floor(Math.random()*100)
 		}
     });
 
@@ -124,8 +124,8 @@ const DailyChart = ({ navigation }) => {
     }    
         
     return (
-
          <ScrollView style = {styles.container}> 
+            {/* ----- calendar pie chart ----- */}
 			<Calendar    
                 style = {styles.calendarContaioner} 
                 theme = {{
@@ -151,11 +151,11 @@ const DailyChart = ({ navigation }) => {
 				dayComponent = {({ date, state }) => {
 					if (!dateMoodData.current[date.dateString]) {
 						dateMoodData.current[date.dateString] = {
-							verygood: Math.floor(Math.random()*3), // 곱으로 비율조절가능
-			                good: Math.floor(Math.random()*3),
-			                normal: Math.floor(Math.random()*3),
-                            bad: Math.floor(Math.random()*3),
-			                verybad: Math.floor(Math.random()*3)
+							verygood: Math.floor(Math.random()*100), // 곱으로 비율조절가능
+			                good: Math.floor(Math.random()*100),
+			                normal: Math.floor(Math.random()*100),
+                            bad: Math.floor(Math.random()*100),
+			                verybad: Math.floor(Math.random()*100)
 						};
 					}
 					return (
@@ -170,7 +170,7 @@ const DailyChart = ({ navigation }) => {
 										chartConfig = {chartConfig}
 										hasLegend = {false}
 										accessor = 'value'
-										backgroundColor = 'transparent'  // 투명
+										backgroundColor = 'transparent'  // 투명하게 설정
 									/>
 								</View>
 								<View style = {{
@@ -189,9 +189,10 @@ const DailyChart = ({ navigation }) => {
 					)
 				}}
 			/>
-
+            
+            {/* ----- 캘린더 Date 선택 -> pie chart ----- */}
             <View style = {styles.line} /> 
-                <Text style = {styles.title}> {currentDate} </Text>
+            <Text style = {styles.title}> {currentDate} </Text>
                 <View style={styles.chartContainer}>
                     <VictoryPie
                         animate = {{ easing: 'exp' }}
@@ -209,8 +210,7 @@ const DailyChart = ({ navigation }) => {
 				        height = {200}
 				        orientation = 'vertical'
 				        gutter = {20}
-					    colorScale = {[ VERYGOOD_COLOR, GOOD_COLOR, NORMAL_COLOR, BAD_COLOR, VERYBAD_COLOR ]}
-				        style = {{ title: {fontSize: 10 } }}
+					    colorScale = {chartDataColor}
 				        data = {[
                             { name: '매우 좋음' }, 
                             { name: '좋음' }, 
@@ -220,7 +220,8 @@ const DailyChart = ({ navigation }) => {
 				        ]}
 				    />
 			    </View>
-
+            
+            {/* ----- 감정변화 line chart  ----- */}
             <View style = {styles.line} />
 			<ButtonGroup
 				buttons = {['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨']}
@@ -235,6 +236,16 @@ const DailyChart = ({ navigation }) => {
                         data: { stroke: "#c43a31" },
                         parent: { border: "#cccccc"}
                     }}
+                    animate = {{
+                        duration: 2000,
+                        onLoad: { duration: 1000 }
+                    }}
+                    data = {moodGraphData}
+                />
+            </VictoryChart>
+            <VictoryChart>
+                <VictoryBar
+                    style={{ data: { fill: '#bebebe' } }}
                     animate = {{
                         duration: 2000,
                         onLoad: { duration: 1000 }
