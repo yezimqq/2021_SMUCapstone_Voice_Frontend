@@ -1,47 +1,215 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native'; 
+import React, { useState, useRef, useEffect } from "react";
+import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../images';
+import { Audio } from "expo-av";
+// import { Ionicons } from "@expo/vector-icons";
+import { Fontisto } from "@expo/vector-icons";
+import {
+    getInfoAsync as fsGetInfoAsync,
+    documentDirectory,
+    cacheDirectory,
+    readDirectoryAsync as fsReadDirectoryAsync,
+    makeDirectoryAsync,
+    copyAsync,
+} from "expo-file-system";
 
-import { Audio } from 'expo-av';
 
-// 기능 추가는 아직 안하고, 모든 버튼 alert로 작동만 확인
 const AudioRecording = ({ navigation }) => {
-    const [recording, setRecording] = useState('');
+    const currentRecording = useRef(null);
+    const currentSound = useRef(null);
+
+    const [isRecording, setIsRecording] = useState(false);
+    const [isPlaying, setIsPlaying] = useState(false);
+    const [isPlaybackAllowed, setIsPlaybackAllowed] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [recordingDuration, setRecordingDuration] = useState(0);
+    const [playbackDuration, setPlaybackDuration] = useState(0);
+
+    const [isRecordingPermitted, setRecordingPermissions] = useState(false);
+    const [isError, setIsError] = useState(false);
+
+    useEffect(() => {
+        setIsLoading(true);
+        askForPermissions()
+        .then(() => setIsLoading(false))
+        .catch(() => setIsError(true));
+    }, []);
 
 
-  async function startRecording() {
-    try {
-      console.log('Requesting permissions..');
-      await Audio.requestPermissionsAsync();
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
-        playsInSilentModeIOS: true,
-      }); 
-      console.log('녹음 시작');
-      const { recording } = await Audio.Recording.createAsync(
-         Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
-      );
-      setRecording(recording);
-      console.log('녹음 중');
-    } catch (err) {
-      console.error('녹음 실패', err);
-    }
-  }
+    const askForPermissions = async () => {
+        let response = {};
+        
+        try {
+            response = await Audio.requestPermissionsAsync();
+            console.log("got permissions", response);
+        } catch (err) {
+            console.error(err);
+        }
+        
+        setRecordingPermissions(response.status === "granted");
+    };
 
-  async function stopRecording() {
-    console.log('녹음 중지');
-    setRecording(undefined);
-    await recording.stopAndUnloadAsync();
-    const uri = recording.getURI(); 
-    console.log('녹음 종료 및 저장', uri);
-  } 
+
+    const onRecordPressed = () => {
+        setIsLoading(true);
+        if (isRecording) {
+            stopRecording();
+        } 
+        else {
+            startRecording();
+        }
+    };
+
+    const startRecording = async () => {
+        if (currentSound.current !== null) {
+            await currentSound.current.unloadAsync();
+            currentSound.current.setOnPlaybackStatusUpdate(null);
+            currentSound.current = null;
+        }
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: true,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+            staysActiveInBackground: true,
+        });
+
+        if (currentRecording.current !== null) {
+            currentRecording.current.setOnRecordingStatusUpdate(null);
+            currentRecording.current = null;
+        }
+
+        const recording = new Audio.Recording();
+
+        try {
+            await recording.prepareToRecordAsync(
+                Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
+            );
+            currentRecording.current = recording;
+            recording.setOnRecordingStatusUpdate(updateScreenForRecordingStatus);
+
+            await recording.startAsync();
+            setIsLoading(false);
+            setIsRecording(true);
+             // You are now recording!
+        } catch (error) {
+             // An error occurred!
+          console.error(error);
+        }   
+    };
+
+    const stopRecording = async () => {
+        setIsLoading(true);
+        setIsRecording(false);
+        try {
+            await currentRecording.current.stopAndUnloadAsync();
+        } catch (error) {
+          // Do nothing -- we are already unloaded.
+        }
+
+        await Audio.setAudioModeAsync({
+            allowsRecordingIOS: false,
+            interruptionModeIOS: Audio.INTERRUPTION_MODE_IOS_DO_NOT_MIX,
+            playsInSilentModeIOS: true,
+            playsInSilentLockedModeIOS: true,
+            shouldDuckAndroid: true,
+            interruptionModeAndroid: Audio.INTERRUPTION_MODE_ANDROID_DO_NOT_MIX,
+            playThroughEarpieceAndroid: false,
+            staysActiveInBackground: true,
+        });
+        const {
+            sound,
+            status,
+        } = await currentRecording.current.createNewLoadedSoundAsync(
+            {},
+            updateScreenForSoundStatus
+        );
+        currentSound.current = sound;
+        setIsLoading(false);
+        setIsPlaybackAllowed(true);
+    };
+
+    const saveRecordingToDisk = async () => {
+        const fileInfo = await fsGetInfoAsync(currentRecording.current.getURI());
+
+        try {
+            await makeDirectoryAsync(documentDirectory + "my-recordings", {
+                intermediates: true,
+            });
+            // save in persistent storage
+            await copyAsync({
+                from: fileInfo.uri,
+                to: `${documentDirectory}/my-recordings/recording-${Date.now()}.wav`,
+            });
+        } catch (err) {
+            console.error(err);
+        }
+    };
+
+    const updateScreenForSoundStatus = (status) => {
+        if (status.isPlaying) {
+            setIsPlaying(true);
+            setPlaybackDuration(status.positionMillis);
+        } 
+        else {
+            setIsPlaying(false);
+            
+            if (status.didJustFinish) {
+            // seek back to 0
+            currentSound.current.setPositionAsync(0);
+            }
+        }
+    };
+
+    const updateScreenForRecordingStatus = (status) => {
+        if (status.canRecord) {
+            setIsRecording(status.isRecording);
+            setRecordingDuration(status.durationMillis);
+        } 
+        else if (status.isDoneRecording) {
+            setIsRecording(false);
+            setRecordingDuration(status.durationMillis);
+            if (!isLoading) {
+                stopRecording();
+            }
+        }
+    };
+
+    const onPlayPausePressed = () => {
+        if (currentSound.current != null) {
+            if (isPlaying) {
+                currentSound.current.pauseAsync();
+            } 
+            else {
+                currentSound.current.playAsync();
+            }
+        }
+    };
+
+    const padWithZero = (number) => {
+        const string = number.toString();
+        if (number < 10) {
+            return "0" + string;
+        }
+        return string;
+    };
+
+    const getFormattedTimeFromMillis = (millis) => {
+        const totalSeconds = millis / 1000;
+        const seconds = Math.floor(totalSeconds % 60);
+        const minutes = Math.floor(totalSeconds / 60);
+
+        return padWithZero(minutes) + ":" + padWithZero(seconds);
+    };
 
     return (
-        <View style = {styles.container}>
+        <View style={{ ...styles.container, opacity: isLoading ? 0.2 : 1.0 }}>
             <View style = {styles.helpBox}>
                 <Text style = {styles.helpText}>
-                    {recording? (
+                    {isRecording? (
                         '아래 문장 읽기가 끝나면 녹음 중지 버튼을 눌러주세요.'
                     ) : (
                         '녹음 시작 버튼을 누르고 아래의 문장을 소리내어 읽어주세요.'
@@ -50,7 +218,7 @@ const AudioRecording = ({ navigation }) => {
             </View>
 
             <View style = {styles.containerTop}> 
-                {recording? (
+            {isRecording? (
                     <Image
                         source = {images.wave}
                         style = {styles.waveImage}
@@ -61,76 +229,113 @@ const AudioRecording = ({ navigation }) => {
                         style = {styles.earImage}
                     />
                 )}
-                {recording? (
-                    null
-                ) : (
-                    <TouchableOpacity
-                        style = {styles.listenBtn}
-                        onPress = {() => alert('듣기')}>
-                        <Icon
-                            name = 'play-circle-outline'
-                            size = {30}
-                            style = {{marginRight: 10}}
-                        />
-                        <Text style = {styles.btnText}>듣기</Text>
-                    </TouchableOpacity>
-                )}
+                
+               {isRecording? (
+                 null
+               ) : (
+                <TouchableOpacity 
+                    style = {styles.listenBtn}
+                    onPress={onPlayPausePressed}> 
+                    {!isPlaybackAllowed  && (
+                    <Icon
+                        style={{ marginRight: 15 }}
+                        name={'play-circle-outline'}
+                        size={30}
+                        color='black'
+                    /> )  }
+                    {isPlaybackAllowed && !isLoading && currentSound.current && (
+                    <Icon
+                        style={{ marginRight: 15 }}
+                        name={isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
+                        size={30}
+                        color='black'
+                        accessibilityLabel="Playback recorded audio button"
+                    /> 
+                    )}
+                    <Text style = {styles.btnText}>듣기</Text>
+                </TouchableOpacity>
+              
+              )} 
             </View>
 
+            <Text>
+                        {getFormattedTimeFromMillis(recordingDuration)}
+                    </Text>
             <View style ={styles.textBox} />
 
+
+            
             <View style = {styles.containerBottom}>
-                <View style = {styles.align}>
-                    <TouchableOpacity>
+            <View style = {styles.align}>
+            <TouchableOpacity>
                         <Icon
                             name = 'chevron-back-circle-outline'
                             size = {35}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity 
-                        style = {styles.recordingBtn}
-                        onPress={recording ? stopRecording : startRecording}
-                    >
-                        {recording? (
-                            <Icon
-                                name = 'stop-circle-outline'
-                                size = {32}
-                                marginRight = {10} />
-                        ) : (
-                            <Image 
-                                source = {images.recording}
-                                style = {styles.imageIcon} />
-                        )}              
-                        <Button
-                            title={recording ? '녹음 중지' : '녹음 시작'}
-                            onPress={recording ? stopRecording : startRecording}
-                            color = 'black'
-                        />
-                    </TouchableOpacity>
-                    <TouchableOpacity>
+            <TouchableOpacity 
+                style ={styles.recordingBtn}
+                onPress={onRecordPressed}>
+                {isRecording && (
+                  <>
+                    
+                    <Icon
+                        name={'stop-circle-outline'}
+                        
+                        size={32}
+                        color='black'
+                        accessibilityLabel="Stop record audio button"
+                    />
+                    
+                   
+                    <Text style = {styles.btnText}>녹음 중지</Text>
+                  </>
+                )}
+
+                {!isRecording && (
+                  <>
+                    <Image 
+                        source = {images.recording}
+                        style = {styles.imageIcon} 
+                    />
+                    <Text style = {styles.btnText}>녹음 시작</Text>
+                  </>
+                )}
+            </TouchableOpacity>
+            <TouchableOpacity>
                         <Icon
                             name = 'chevron-forward-circle-outline'
                             size = {35}
                         />
                     </TouchableOpacity>
-                </View>
-                <TouchableOpacity style={styles.finBtn}>
-                    <Text 
-                        style={styles.btnText}
-                        onPress = {() => navigation.navigate('AudioStorage')}>녹음 종료</Text>
-                        {/*  종료버튼 클릭 시 녹음분 전체 저장  */}
+            </View>
+
+            
+          
+                <TouchableOpacity 
+                    style={styles.finBtn}
+                    onPress = {saveRecordingToDisk}
+                >
+                    <Text style={styles.btnText}>녹음 저장</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+       </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
+    row: {
+        display: "flex",
+        flexDirection: "row",
+        alignItems: "center",
+        justifyContent: "flex-start",
+    },
+
     container: {
         flex: 1,
         backgroundColor: 'white',
-        alignItems: 'center',
-        justifyContent: 'center',
+        alignItems: "center",
+        justifyContent: "center",
     },
 
     helpBox: {
@@ -153,7 +358,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         flexDirection: 'row',
     },
-
 
     containerBottom: {
         flex: 2.5,
@@ -262,4 +466,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default AudioRecording;
+export default AudioRecording; 

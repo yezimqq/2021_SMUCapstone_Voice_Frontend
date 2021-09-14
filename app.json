@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "psycology_consult",
-    "slug": "psycology_cohsult",
+    "slug": "psycology_consult",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/custom/chat_icon.png",
