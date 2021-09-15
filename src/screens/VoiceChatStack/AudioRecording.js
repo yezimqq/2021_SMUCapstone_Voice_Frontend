@@ -3,16 +3,7 @@ import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from "react-n
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../images';
 import { Audio } from "expo-av";
-// import { Ionicons } from "@expo/vector-icons";
-import { Fontisto } from "@expo/vector-icons";
-import {
-    getInfoAsync as fsGetInfoAsync,
-    documentDirectory,
-    cacheDirectory,
-    readDirectoryAsync as fsReadDirectoryAsync,
-    makeDirectoryAsync,
-    copyAsync,
-} from "expo-file-system";
+import { getInfoAsync as fsGetInfoAsync, documentDirectory, makeDirectoryAsync, copyAsync } from "expo-file-system";
 
 
 const AudioRecording = ({ navigation }) => {
@@ -26,6 +17,7 @@ const AudioRecording = ({ navigation }) => {
     const [recordingDuration, setRecordingDuration] = useState(0);
     const [playbackDuration, setPlaybackDuration] = useState(0);
 
+    /* ----- Recording Permission ----- */
     const [isRecordingPermitted, setRecordingPermissions] = useState(false);
     const [isError, setIsError] = useState(false);
 
@@ -35,7 +27,6 @@ const AudioRecording = ({ navigation }) => {
         .then(() => setIsLoading(false))
         .catch(() => setIsError(true));
     }, []);
-
 
     const askForPermissions = async () => {
         let response = {};
@@ -50,7 +41,7 @@ const AudioRecording = ({ navigation }) => {
         setRecordingPermissions(response.status === "granted");
     };
 
-
+    /* ----- onPress() => start/stop Recording ----- */
     const onRecordPressed = () => {
         setIsLoading(true);
         if (isRecording) {
@@ -61,6 +52,7 @@ const AudioRecording = ({ navigation }) => {
         }
     };
 
+    /* ----- start Recording ----- */
     const startRecording = async () => {
         if (currentSound.current !== null) {
             await currentSound.current.unloadAsync();
@@ -94,20 +86,21 @@ const AudioRecording = ({ navigation }) => {
             await recording.startAsync();
             setIsLoading(false);
             setIsRecording(true);
-             // You are now recording!
+             // now recording!
         } catch (error) {
              // An error occurred!
           console.error(error);
         }   
     };
 
+    /* ----- stop Recording  ----- */
     const stopRecording = async () => {
         setIsLoading(true);
         setIsRecording(false);
         try {
             await currentRecording.current.stopAndUnloadAsync();
         } catch (error) {
-          // Do nothing -- we are already unloaded.
+          // Do nothing -- already unloaded.
         }
 
         await Audio.setAudioModeAsync({
@@ -132,6 +125,7 @@ const AudioRecording = ({ navigation }) => {
         setIsPlaybackAllowed(true);
     };
 
+    /* ----- save Recording to Disk ----- */
     const saveRecordingToDisk = async () => {
         const fileInfo = await fsGetInfoAsync(currentRecording.current.getURI());
 
@@ -149,6 +143,7 @@ const AudioRecording = ({ navigation }) => {
         }
     };
 
+    /* ----- Recording time ----- */
     const updateScreenForSoundStatus = (status) => {
         if (status.isPlaying) {
             setIsPlaying(true);
@@ -178,6 +173,7 @@ const AudioRecording = ({ navigation }) => {
         }
     };
 
+    /* -----  Press Listening Button => play/pause Recording -----*/
     const onPlayPausePressed = () => {
         if (currentSound.current != null) {
             if (isPlaying) {
@@ -235,107 +231,104 @@ const AudioRecording = ({ navigation }) => {
                ) : (
                 <TouchableOpacity 
                     style = {styles.listenBtn}
-                    onPress={onPlayPausePressed}> 
+                    onPress = {onPlayPausePressed}> 
                     {!isPlaybackAllowed  && (
                     <Icon
-                        style={{ marginRight: 15 }}
-                        name={'play-circle-outline'}
-                        size={30}
-                        color='black'
+                        style = {{ marginRight: 15 }}
+                        name = {'play-circle-outline'}
+                        size = {30}
+                        color = 'black'
                     /> )  }
                     {isPlaybackAllowed && !isLoading && currentSound.current && (
                     <Icon
-                        style={{ marginRight: 15 }}
-                        name={isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
-                        size={30}
-                        color='black'
-                        accessibilityLabel="Playback recorded audio button"
+                        style = {{ marginRight: 15 }}
+                        name = {isPlaying ? 'pause-circle-outline' : 'play-circle-outline'}
+                        size = {30}
+                        color = 'black'
+                        accessibilityLabel = "Playback recorded audio button"
                     /> 
                     )}
                     <Text style = {styles.btnText}>듣기</Text>
                 </TouchableOpacity>
-              
               )} 
             </View>
 
-            <Text>
-                        {getFormattedTimeFromMillis(recordingDuration)}
-                    </Text>
+
+            <Text>{getFormattedTimeFromMillis(recordingDuration)}</Text>
+
             <View style ={styles.textBox} />
 
 
-            
             <View style = {styles.containerBottom}>
-            <View style = {styles.align}>
-            <TouchableOpacity>
+                <View style = {styles.align}>
+                    <TouchableOpacity>
                         <Icon
                             name = 'chevron-back-circle-outline'
                             size = {35}
+                            /* ----- View prev text ----- */
                         />
                     </TouchableOpacity>
-            <TouchableOpacity 
-                style ={styles.recordingBtn}
-                onPress={onRecordPressed}>
-                {isRecording && (
-                  <>
-                    
-                    <Icon
-                        name={'stop-circle-outline'}
-                        
-                        size={32}
-                        color='black'
-                        accessibilityLabel="Stop record audio button"
-                    />
-                    
-                   
-                    <Text style = {styles.btnText}>녹음 중지</Text>
-                  </>
-                )}
 
-                {!isRecording && (
-                  <>
-                    <Image 
-                        source = {images.recording}
-                        style = {styles.imageIcon} 
-                    />
-                    <Text style = {styles.btnText}>녹음 시작</Text>
-                  </>
-                )}
-            </TouchableOpacity>
-            <TouchableOpacity>
+                    <TouchableOpacity 
+                        style ={styles.recordingBtn}
+                        onPress = {onRecordPressed}
+                    >
+                        {isRecording && (
+                          <>
+                            <Icon
+                                name = {'stop-circle-outline'}
+                                size = {32}
+                                color = 'black'
+                                accessibilityLabel = "Stop record audio button"
+                            />   
+                            <Text style = {styles.btnText}>녹음 중지</Text>
+                          </>
+                        )}
+
+                        {!isRecording && (
+                          <>
+                            <Image 
+                                source = {images.recording}
+                                style = {styles.imageIcon} 
+                            />
+                            <Text style = {styles.btnText}>녹음 시작</Text>
+                          </>
+                        )}
+                    </TouchableOpacity>
+
+                    <TouchableOpacity>
                         <Icon
                             name = 'chevron-forward-circle-outline'
                             size = {35}
+                            /* ----- View next text ----- */
                         />
                     </TouchableOpacity>
-            </View>
+                </View>
 
-            
-          
                 <TouchableOpacity 
-                    style={styles.finBtn}
+                    style = {styles.finBtn}
                     onPress = {saveRecordingToDisk}
                 >
-                    <Text style={styles.btnText}>녹음 저장</Text>
+                    <Text style = {styles.btnText}>녹음 저장하기</Text>
                 </TouchableOpacity>
             </View>
-       </View>
+        </View>
     );
 }
 
 const styles = StyleSheet.create({
     row: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "flex-start",
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'flex-start',
     },
 
     container: {
         flex: 1,
         backgroundColor: 'white',
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
     },
 
     helpBox: {
@@ -386,8 +379,8 @@ const styles = StyleSheet.create({
         borderColor:'black',
         borderRadius: 4,
         height: 50,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         shadowColor: 'rgba(0, 0, 0, 0.5)',
         shadowOpacity: 2,
         shadowOffset: {width:2, height:2},
@@ -413,8 +406,8 @@ const styles = StyleSheet.create({
 
     align: {
         flexDirection: 'row',
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 20,
         marginBottom: 90,
     },
@@ -427,8 +420,8 @@ const styles = StyleSheet.create({
         borderColor:'black',
         borderRadius: 4,
         height: 50,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         shadowColor: 'rgba(0, 0, 0, 0.5)',
         shadowOpacity: 2,
         shadowOffset: {width:2, height:2},
@@ -451,8 +444,8 @@ const styles = StyleSheet.create({
         borderColor:'black',
         borderRadius: 4,
         height: 50,
-        alignItems: "center",
-        justifyContent: "center",
+        alignItems: 'center',
+        justifyContent: 'center',
         marginTop: 20,
         marginBottom: 20,
         shadowColor: 'rgba(0, 0, 0, 0.5)',
@@ -462,7 +455,7 @@ const styles = StyleSheet.create({
 
     btnText: {
         fontSize: 18,
-        color: "black",
+        color: 'black',
     },
 });
 

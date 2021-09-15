@@ -63,6 +63,7 @@ const AudioStorage = ({ navigation }) => {
         setLoading(false);
     };
 
+    /* ----- Play Recording Files ----- */
     const playRecording = async (recordingFileName) => {
         console.log("play recording pressed", recordingFileName);
         try {
@@ -78,6 +79,7 @@ const AudioStorage = ({ navigation }) => {
             }
         };
 
+    /* ----- Swipe Left: Delete Recording Files ----- */
     const onSwipeValueChange = (swipeData) => {
         const { key, value } = swipeData;
         if (value < -Dimensions.get("window").width && !isAnimationRunning) {
@@ -146,8 +148,8 @@ const AudioStorage = ({ navigation }) => {
     };
 
     const renderHiddenItem = () => (
-        <View style={styles.rowBack}>
-            <View style={[styles.backRightBtn, styles.backRightBtnRight]}>
+        <View style = {styles.rowBack}>
+            <View style = {[styles.backRightBtn, styles.backRightBtnRight]}>
                 <Text style={styles.backTextWhite}>Delete</Text>
             </View>
         </View>
@@ -158,31 +160,31 @@ const AudioStorage = ({ navigation }) => {
             {isLoading && <Text>Loading recordings...</Text>}
             {!isLoading && (
                 <SwipeListView
-                    style={styles.swipeListContainer}
+                    style = {styles.swipeListContainer}
                     disableRightSwipe
-                    data={recordingList}
-                    renderItem={renderItem}
-                    renderHiddenItem={renderHiddenItem}
-                    rightOpenValue={-Dimensions.get("window").width}
-                    onSwipeValueChange={onSwipeValueChange}
-                    useNativeDriver={false}
+                    data = {recordingList}
+                    renderItem = {renderItem}
+                    renderHiddenItem = {renderHiddenItem}
+                    rightOpenValue = {-Dimensions.get("window").width}
+                    onSwipeValueChange = {onSwipeValueChange}
+                    useNativeDriver = {false}
                 />
             )}
             <TouchableOpacity style={styles.trainBtn}>
                 <Text 
-                    style={styles.btnText}
+                    style = {styles.btnText}
                     onPress = {() => alert('음성 학습하기')}>음성 학습하기</Text>
             </TouchableOpacity>
             <View style = {styles.tab}>
                 <TouchableOpacity 
-                    style={styles.tabContainer} 
-                    onPress={() => alert('음성파일 업로드')}>
+                    style = {styles.tabContainer} 
+                    onPress = {() => alert('음성파일 업로드')}>
                     <TabIcon
                         name = 'upload'
                         size = {30}
                         color = 'black'
                     />
-                    <Text style={styles.tabText}>음성파일 업로드</Text>
+                    <Text style = {styles.tabText}>음성파일 업로드</Text>
                 </TouchableOpacity>
                 <TouchableOpacity 
                     style={styles.tabContainer} 
@@ -246,10 +248,10 @@ const styles = StyleSheet.create({
     },
   
     backRightBtn: {
-        alignItems: "center",
+        alignItems: 'center',
         bottom: 0,
-        justifyContent: "center",
-        position: "absolute",
+        justifyContent: 'center',
+        position: 'absolute',
         top: 0,
         width: 75,
     },
@@ -267,8 +269,8 @@ const styles = StyleSheet.create({
     trainBtn: {
         position: 'absolute',
         bottom: '10%',
-        width: "80%",
-        backgroundColor: "#ed847a",
+        width: '80%',
+        backgroundColor: '#ed847a',
         borderWidth: 1,
         borderColor:'black',
         borderRadius: 4,
