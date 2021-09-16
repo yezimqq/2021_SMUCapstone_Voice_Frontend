@@ -8,7 +8,7 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState('');
     const { dispatch } = useContext(UserContext);
 
-    const _handleLoginButton = async => {
+    const _handleLoginButton = async () => {
         fetch("http://13.124.78.167:8080/login", {
             method: "POST",
             headers: { 
@@ -54,6 +54,8 @@ const Login = ({ navigation }) => {
                     style={styles.inputText}
                     placeholder="아이디"
                     placeholderTextColor="#bebebe"
+                    autoCapitalize = 'none'
+                    returnKeyType = 'next'
                     onChangeText={text => setId(text)} />
             </View>
             <View style={styles.inputView} >
@@ -62,6 +64,8 @@ const Login = ({ navigation }) => {
                     style={styles.inputText}
                     placeholder="비밀번호"
                     placeholderTextColor="#bebebe"
+                    autoCapitalize = 'none'
+                    returnKeyType = 'done'
                     onChangeText={text => setPassword(text)} />
             </View>
         

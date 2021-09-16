@@ -37,6 +37,8 @@ const Signup = ({ navigation }) => {
                     style={styles.inputText}
                     placeholder="아이디"
                     placeholderTextColor="#bebebe"
+                    autoCapitalize = 'none'
+                    returnKeyType = 'next'
                     onChangeText={text => setId(text)} />
             </View>
             <View style={styles.inputView} >
@@ -45,6 +47,8 @@ const Signup = ({ navigation }) => {
                     style={styles.inputText}
                     placeholder="비밀번호"
                     placeholderTextColor="#bebebe"
+                    autoCapitalize = 'none'
+                    returnKeyType = 'next'
                     onChangeText={text => setPassword(text)} />
             </View>
             <View style={styles.inputView} >
@@ -53,6 +57,8 @@ const Signup = ({ navigation }) => {
                     style={styles.inputText}
                     placeholder="비밀번호 재확인"
                     placeholderTextColor="#bebebe"
+                    autoCapitalize = 'none'
+                    returnKeyType = 'done'
                     onChangeText={text => setConfirmpassword(text)} />
             </View>
         
