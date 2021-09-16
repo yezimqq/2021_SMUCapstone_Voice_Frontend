@@ -1,53 +1,11 @@
-<<<<<<< HEAD
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-=======
 import React, { useContext, useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../contexts';
->>>>>>> master
 
 const Login = ({ navigation }) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
-<<<<<<< HEAD
-  
-    return (
-    <View style={styles.container}>
-        <Text style={styles.logo}>Psycology{'\n'}Consult</Text>
-        <View style={styles.inputView} >
-            <TextInput
-                style={styles.inputText}
-                placeholder="아이디"
-                placeholderTextColor="#bebebe"
-                onChangeText={text => setId(text)} />
-        </View>
-        <View style={styles.inputView} >
-            <TextInput
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="비밀번호"
-                placeholderTextColor="#bebebe"
-                onChangeText={text => setPassword(text)} />
-        </View>
-    
-        <TouchableOpacity 
-            style={styles.loginBtn}
-            onPress = {() => navigation.navigate('Main')}>
-        <Text style={styles.loginText}>로그인</Text>
-        </TouchableOpacity>
-        <View style={styles.line} />
-        <TouchableOpacity 
-            style = {styles.signupContainer}
-            onPress = {() => navigation.navigate('Signup')}>
-        <Text style = {styles.verticalBar}>|     </Text>
-        <Text style={styles.signupText}>회원가입</Text>
-        <Text style = {styles.verticalBar}>     |</Text>
-        </TouchableOpacity>
-
-    </View>
-=======
     const { dispatch } = useContext(UserContext);
 
     const _handleLoginButton = async => {
@@ -122,7 +80,6 @@ const Login = ({ navigation }) => {
             </TouchableOpacity>
 
         </View>
->>>>>>> master
     );
 }
 
