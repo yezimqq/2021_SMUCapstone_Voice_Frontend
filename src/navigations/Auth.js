@@ -6,6 +6,7 @@ import { theme } from '../theme';
 const Stack =  createStackNavigator();
 
 const Auth = () => {
+    
     return (
         <Stack.Navigator
             screenOptions = {{
