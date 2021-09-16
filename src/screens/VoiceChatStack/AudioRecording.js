@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Image, Button } from "react-native";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { images } from '../../images';
+import { Wave } from "react-native-animated-spinkit";
 import { Audio } from "expo-av";
 import { getInfoAsync as fsGetInfoAsync, documentDirectory, makeDirectoryAsync, copyAsync } from "expo-file-system";
 
@@ -233,10 +234,7 @@ const AudioRecording = ({ navigation }) => {
 
             <View style = {styles.containerTop}> 
             {isRecording? (
-                    <Image
-                        source = {images.wave}
-                        style = {styles.waveImage}
-                    />
+                    <Wave size = {70}/>
                 ) : (
                     <Image
                         source = {images.ear}
@@ -405,11 +403,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
 
-    waveImage: {
-        width: '90%',
-        height: '70%',
-
-    },
+    
 
     // 녹음 텍스트박스
     textBox: {
