@@ -4908,6 +4908,7 @@ expo-constants@~11.0.1:
     expo-modules-core "~0.2.0"
     uuid "^3.3.2"
 
+<<<<<<< HEAD
 expo-document-picker@^9.2.4:
   version "9.2.4"
   resolved "https://registry.yarnpkg.com/expo-document-picker/-/expo-document-picker-9.2.4.tgz#8323ba2fcc62039ba2b31d0314aefd42ad48b7e7"
@@ -4917,6 +4918,8 @@ expo-document-picker@^9.2.4:
     expo-modules-core "~0.2.0"
     uuid "^3.3.2"
 
+=======
+>>>>>>> master
 expo-error-recovery@~2.2.0:
   version "2.2.0"
   resolved "https://registry.npmjs.org/expo-error-recovery/-/expo-error-recovery-2.2.0.tgz"
@@ -7351,11 +7354,14 @@ react-is@^17.0.1:
   resolved "https://registry.npmjs.org/react-is/-/react-is-17.0.2.tgz"
   integrity sha512-w2GsyukL62IJnlaff/nRegPQR94C/XXamvMWmSHRJ4y7Ts/4ocGRmTHvOs8PSE6pB3dWOrD/nueuU5sduBsQ4w==
 
+<<<<<<< HEAD
 react-native-animated-spinkit@^1.5.2:
   version "1.5.2"
   resolved "https://registry.yarnpkg.com/react-native-animated-spinkit/-/react-native-animated-spinkit-1.5.2.tgz#b1c00ecbadf48634273e6a843f8dfbcb7c006186"
   integrity sha512-YCQGR3HzEQvyaAnepiyf/hv88Sta3UIZ2CFZPtFqwu+VbFJfMgjJZniOx4157TuR5AAYajEJP9Fgy+JLIU3jzQ==
 
+=======
+>>>>>>> master
 react-native-calendar-strip@^2.2.4:
   version "2.2.4"
   resolved "https://registry.npmjs.org/react-native-calendar-strip/-/react-native-calendar-strip-2.2.4.tgz"
@@ -7400,6 +7406,7 @@ react-native-config@^1.4.4:
   resolved "https://registry.npmjs.org/react-native-config/-/react-native-config-1.4.4.tgz"
   integrity sha512-bu47sJHn/HrB7COAWBI8DieAhrbFLINHFE2HBCcVkDu0Y5ScrMs6vL+jhIm+pMSgxouseLhXG8h7xYYpxE38PA==
 
+<<<<<<< HEAD
 react-native-document-picker@^6.0.4:
   version "6.0.4"
   resolved "https://registry.yarnpkg.com/react-native-document-picker/-/react-native-document-picker-6.0.4.tgz#21cbe2b3e8a1aff4aafcb81e06f09494b45e62f8"
@@ -7407,6 +7414,8 @@ react-native-document-picker@^6.0.4:
   dependencies:
     invariant "^2.2.4"
 
+=======
+>>>>>>> master
 react-native-elements@^3.4.2:
   version "3.4.2"
   resolved "https://registry.npmjs.org/react-native-elements/-/react-native-elements-3.4.2.tgz"

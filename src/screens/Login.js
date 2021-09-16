@@ -1,9 +1,17 @@
+<<<<<<< HEAD
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
+=======
+import React, { useContext, useState } from 'react';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { UserContext } from '../contexts';
+>>>>>>> master
 
 const Login = ({ navigation }) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
+<<<<<<< HEAD
   
     return (
     <View style={styles.container}>
@@ -39,6 +47,82 @@ const Login = ({ navigation }) => {
         </TouchableOpacity>
 
     </View>
+=======
+    const { dispatch } = useContext(UserContext);
+
+    const _handleLoginButton = async => {
+        fetch("http://13.124.78.167:8080/login", {
+            method: "POST",
+            headers: { 
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+                loginId: id,
+                password: password,
+            }),
+        })
+        .then(res => res.json())
+        .then(res => {
+            console.log(res);
+            AsyncStorage.setItem('access_token', res.access_token);
+            if (res.success === id) {
+                Alert.alert("안내", "로그인 성공");
+                dispatch({ LoginId: id, password: password });
+            }
+            else
+                Alert.alert("안내", "아이디와 비밀번호를 확인해주세요");
+        })
+
+        /* 로그인한 사람 관련 데이터 불러오기 (지금은 안 쓰니 일단 제외)
+            fetch("http://13.124.78.167:8080/login", {
+                method: "POST",
+                headers: { 
+                    Authorization: AsyncStorage.getItem("access_token")
+                },
+            })
+            .then(response => response.json())
+            .then(response => {
+                console.log(response);
+            })
+        */
+    }
+
+
+    return (
+        <View style={styles.container}>
+            <Text style={styles.logo}>Psycology{'\n'}Consult</Text>
+            <View style={styles.inputView} >
+                <TextInput
+                    style={styles.inputText}
+                    placeholder="아이디"
+                    placeholderTextColor="#bebebe"
+                    onChangeText={text => setId(text)} />
+            </View>
+            <View style={styles.inputView} >
+                <TextInput
+                    secureTextEntry
+                    style={styles.inputText}
+                    placeholder="비밀번호"
+                    placeholderTextColor="#bebebe"
+                    onChangeText={text => setPassword(text)} />
+            </View>
+        
+            <TouchableOpacity 
+                style={styles.loginBtn}
+                onPress = {_handleLoginButton}>
+            <Text style={styles.loginText}>로그인</Text>
+            </TouchableOpacity>
+            <View style={styles.line} />
+            <TouchableOpacity 
+                style = {styles.signupContainer}
+                onPress = {() => navigation.navigate('Signup')}>
+            <Text style = {styles.verticalBar}>|     </Text>
+            <Text style={styles.signupText}>회원가입</Text>
+            <Text style = {styles.verticalBar}>     |</Text>
+            </TouchableOpacity>
+
+        </View>
+>>>>>>> master
     );
 }
 
