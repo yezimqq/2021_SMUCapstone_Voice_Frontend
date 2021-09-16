@@ -5,17 +5,10 @@ import Icon from 'react-native-vector-icons/AntDesign';
 import TabIcon from 'react-native-vector-icons/Foundation'
 import { Audio } from "expo-av";
 import { documentDirectory, readDirectoryAsync as fsReadDirectoryAsync, deleteAsync } from "expo-file-system";
-<<<<<<< HEAD
-import * as DocumentPicker from 'expo-document-picker';
-
-const AudioStorage = ({ navigation }) => {
-    /* make directory in app */
-=======
 
 
 const AudioStorage = ({ navigation }) => {
 
->>>>>>> master
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -70,11 +63,6 @@ const AudioStorage = ({ navigation }) => {
         setLoading(false);
     };
 
-<<<<<<< HEAD
-    /* file upload */
-
-=======
->>>>>>> master
     /* ----- Play Recording Files ----- */
     const playRecording = async (recordingFileName) => {
         console.log("play recording pressed", recordingFileName);
@@ -85,19 +73,11 @@ const AudioStorage = ({ navigation }) => {
             });
             await soundObject.playAsync();
             // Your sound is playing!
-<<<<<<< HEAD
-        } catch (error) {
-                console.error(error);
-            // An error occurred!
-        }
-    };
-=======
             } catch (error) {
                 console.error(error);
             // An error occurred!
             }
         };
->>>>>>> master
 
     /* ----- Swipe Left: Delete Recording Files ----- */
     const onSwipeValueChange = (swipeData) => {
@@ -175,23 +155,9 @@ const AudioStorage = ({ navigation }) => {
         </View>
     );
 
-<<<<<<< HEAD
-    {/* ----- can upload audio file(invisible) ----- */}
-    const uploadFile = async() => {
-        let result = await DocumentPicker.getDocumentAsync({
-            type: "audio/*" // all files => type: "*/*"
-          });
-          console.log(result); // can see directory path
-    };
-
-    return (
-        <View style={styles.container}>
-            {isLoading && <Text>Loading......</Text>}
-=======
     return (
         <View style={styles.container}>
             {isLoading && <Text>Loading recordings...</Text>}
->>>>>>> master
             {!isLoading && (
                 <SwipeListView
                     style = {styles.swipeListContainer}
@@ -212,11 +178,7 @@ const AudioStorage = ({ navigation }) => {
             <View style = {styles.tab}>
                 <TouchableOpacity 
                     style = {styles.tabContainer} 
-<<<<<<< HEAD
-                    onPress = {uploadFile}>
-=======
                     onPress = {() => alert('음성파일 업로드')}>
->>>>>>> master
                     <TabIcon
                         name = 'upload'
                         size = {30}
