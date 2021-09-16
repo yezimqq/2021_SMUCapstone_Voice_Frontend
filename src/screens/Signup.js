@@ -1,56 +1,11 @@
-<<<<<<< HEAD
-import React, { useState }from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity } from 'react-native';
-//import AsyncStorage from '@react-native-community/async-storage';
-=======
 import React, { useContext, useState }from 'react';
 import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
 import { UserContext } from '../contexts';
->>>>>>> master
 
 const Signup = ({ navigation }) => {
     const [id, setId] = useState("");
     const [password, setPassword] = useState("");
     const [confirmpassword, setConfirmpassword] = useState("");
-<<<<<<< HEAD
-
-    return (
-    <View style={styles.container}>
-        <Text style={styles.logo}>회원가입</Text>
-        <View style={styles.inputView} >
-            <TextInput
-                style={styles.inputText}
-                placeholder="아이디"
-                placeholderTextColor="#bebebe"
-                onChangeText={text => setId(text)} />
-        </View>
-        <View style={styles.inputView} >
-            <TextInput
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="비밀번호"
-                placeholderTextColor="#bebebe"
-                onChangeText={text => setPassword(text)} />
-        </View>
-        <View style={styles.inputView} >
-            <TextInput
-                secureTextEntry
-                style={styles.inputText}
-                placeholder="비밀번호 재확인"
-                placeholderTextColor="#bebebe"
-                onChangeText={text => setConfirmpassword(text)} />
-        </View>
-      
-        <TouchableOpacity 
-            style={styles.signupBtn}
-            onPress = {() => navigation.navigate('Login')}>
-        <Text style={styles.signupText}>가입하기</Text>
-        </TouchableOpacity>
-
-    </View> 
-    );
-  }
-=======
     const { dispatch } = useContext(UserContext);
 
     const _handleSignupButton = () => {
@@ -111,7 +66,6 @@ const Signup = ({ navigation }) => {
     );
   }
 
->>>>>>> master
   const styles = StyleSheet.create({
     container: {
         flex: 1,
