@@ -9,6 +9,20 @@ const Signup = ({ navigation }) => {
     const { dispatch } = useContext(UserContext);
 
     const _handleSignupButton = () => {
+        if(!id) {
+            alert('아이디를 입력해주세요.');
+            return;
+        }
+        if(!password) {
+            alert('비밀번호를 입력해주세요.');
+            return;
+        }
+        if(confirmpassword != password) {
+            alert('비밀번호가 일치하지 않습니다.');
+            return;
+        }
+        
+
         fetch("http://13.124.78.167:8080/signUp", {
             method: "POST",
             headers: { 'Content-Type': 'application/json' },
@@ -18,8 +32,8 @@ const Signup = ({ navigation }) => {
             }),
         })
         .then(res => res.json())
-        .then(res => {
-            if (res.error)
+        .then(res => { 
+            if (res.error) 
                 Alert.alert("안내", "이미 가입된 회원입니다");
             else {
                 dispatch({ LoginId: id, password: password })
@@ -85,7 +99,7 @@ const Signup = ({ navigation }) => {
         fontSize: 45,
         color: "black",
         textAlign: 'center',
-        marginBottom: 40,
+        marginBottom: 50,
     },
 
     inputView: {
@@ -126,4 +140,5 @@ const Signup = ({ navigation }) => {
         color: "black"
     }
 });
-  export default Signup;
+  
+export default Signup;

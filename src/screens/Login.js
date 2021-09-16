@@ -9,6 +9,15 @@ const Login = ({ navigation }) => {
     const { dispatch } = useContext(UserContext);
 
     const _handleLoginButton = async () => {
+        if(!id) {
+            alert('아이디를 입력해주세요.');
+            return;
+        }
+        if(!password) {
+            alert('비밀번호를 입력해주세요.');
+            return;
+        }
+        
         fetch("http://13.124.78.167:8080/login", {
             method: "POST",
             headers: { 
@@ -22,13 +31,15 @@ const Login = ({ navigation }) => {
         .then(res => res.json())
         .then(res => {
             console.log(res);
-            AsyncStorage.setItem('access_token', res.access_token);
+          
             if (res.success === id) {
+                AsyncStorage.setItem('access_token', res.access_token);
                 Alert.alert("안내", "로그인 성공");
                 dispatch({ LoginId: id, password: password });
             }
-            else
+            else {
                 Alert.alert("안내", "아이디와 비밀번호를 확인해주세요");
+            }
         })
 
         /* 로그인한 사람 관련 데이터 불러오기 (지금은 안 쓰니 일단 제외)
@@ -47,39 +58,39 @@ const Login = ({ navigation }) => {
 
 
     return (
-        <View style={styles.container}>
-            <Text style={styles.logo}>Psycology{'\n'}Consult</Text>
-            <View style={styles.inputView} >
+        <View style = {styles.container}>
+            <Text style = {styles.logo}>Psycology{'\n'}Consult</Text>
+            <View style = {styles.inputView} >
                 <TextInput
-                    style={styles.inputText}
-                    placeholder="아이디"
-                    placeholderTextColor="#bebebe"
+                    style = {styles.inputText}
+                    placeholder = '아이디'
+                    placeholderTextColor = '#bebebe'
                     autoCapitalize = 'none'
                     returnKeyType = 'next'
                     onChangeText={text => setId(text)} />
             </View>
-            <View style={styles.inputView} >
+            <View style = {styles.inputView} >
                 <TextInput
                     secureTextEntry
-                    style={styles.inputText}
-                    placeholder="비밀번호"
-                    placeholderTextColor="#bebebe"
+                    style = {styles.inputText}
+                    placeholder = '비밀번호'
+                    placeholderTextColor = '#bebebe'
                     autoCapitalize = 'none'
                     returnKeyType = 'done'
-                    onChangeText={text => setPassword(text)} />
+                    onChangeText = {text => setPassword(text)} />
             </View>
         
             <TouchableOpacity 
-                style={styles.loginBtn}
+                style = {styles.loginBtn}
                 onPress = {_handleLoginButton}>
-            <Text style={styles.loginText}>로그인</Text>
+            <Text style = {styles.loginText}>로그인</Text>
             </TouchableOpacity>
-            <View style={styles.line} />
+            <View style = {styles.line} />
             <TouchableOpacity 
                 style = {styles.signupContainer}
                 onPress = {() => navigation.navigate('Signup')}>
             <Text style = {styles.verticalBar}>|     </Text>
-            <Text style={styles.signupText}>회원가입</Text>
+            <Text style ={styles.signupText}>회원가입</Text>
             <Text style = {styles.verticalBar}>     |</Text>
             </TouchableOpacity>
 
@@ -87,9 +98,6 @@ const Login = ({ navigation }) => {
     );
 }
 
-login = () => {
-    fetch('https')
-}
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -166,4 +174,5 @@ const styles = StyleSheet.create({
         marginTop: 11
     }
 });
+
 export default Login;
