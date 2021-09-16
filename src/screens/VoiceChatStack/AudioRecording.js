@@ -5,6 +5,25 @@ import { images } from '../../images';
 import { Audio } from "expo-av";
 import { getInfoAsync as fsGetInfoAsync, documentDirectory, makeDirectoryAsync, copyAsync } from "expo-file-system";
 
+/*----- can change recording option(sample rate) ----*/
+const RecordingOptions = {
+    android: {
+      ...Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY.android,
+      extension: '.wav',
+      outputFormat: Audio.RECORDING_OPTION_ANDROID_AUDIO_ENCODER_DEFAULT,
+      sampleRate: 22050, // 기본설정: 44100
+      numberOfChannels: 1,
+    },
+    ios: {
+      ...Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY.ios,
+      extension: '.wav',
+      outputFormat: Audio.RECORDING_OPTION_IOS_OUTPUT_FORMAT_LINEARPCM,
+      sampleRate: 22050, // 기본설정: 44100
+      numberOfChannels: 1,
+      bitRateStrategy:
+        Audio.RECORDING_OPTION_IOS_BIT_RATE_STRATEGY_CONSTANT,
+    },
+  };
 
 const AudioRecording = ({ navigation }) => {
     const currentRecording = useRef(null);
@@ -77,9 +96,8 @@ const AudioRecording = ({ navigation }) => {
         const recording = new Audio.Recording();
 
         try {
-            await recording.prepareToRecordAsync(
-                Audio.RECORDING_OPTIONS_PRESET_HIGH_QUALITY
-            );
+            await recording.prepareToRecordAsync(RecordingOptions);  // sample rate: 22050
+
             currentRecording.current = recording;
             recording.setOnRecordingStatusUpdate(updateScreenForRecordingStatus);
 
