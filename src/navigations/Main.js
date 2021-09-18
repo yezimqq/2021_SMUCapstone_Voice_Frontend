@@ -3,9 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../screens';
 import { ChatList, Chat, ChatSetting, AudioRecording, AudioStorage } from '../screens';
-import { Diary, DiarySetting, DiaryWrite } from '../screens'; 
+import { Diary, DiarySetting, DiaryWrite, DiaryScreen, DiaryDetail } from '../screens'; 
 import { DailyChart, MonthlyChart } from '../screens';
 import Icon from 'react-native-vector-icons/Ionicons';
+
 
 const Stack =  createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -142,7 +143,7 @@ const VoiceChatStack  = () => {
 const DiaryStack  = () => {
     return (
         <Stack.Navigator
-            initialRouteName = 'Diary'
+            initialRouteName = 'DiaryScreen'
         >
             <Stack.Screen
                 name = "Diary" 
@@ -184,7 +185,36 @@ const DiaryStack  = () => {
                     },
                     headerBackTitleVisible: false,
                 }}
-            />       
+            />     
+
+
+            <Stack.Screen
+                name = "DiaryScreen" 
+                component = {DiaryScreen}
+                options = {{
+                    headerTitle: "감정일기",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerBackTitleVisible: false,
+                }}
+            />  
+
+            <Stack.Screen
+                name = "DiaryDetail" 
+                component = {DiaryDetail}
+                options = {{
+                    headerTitle: "감정일기",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerBackTitleVisible: false,
+                }}
+            />                
         </Stack.Navigator>
     );
 }

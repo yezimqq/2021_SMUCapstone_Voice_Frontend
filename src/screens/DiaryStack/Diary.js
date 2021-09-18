@@ -59,6 +59,14 @@ const Diarys = [
     }
 ]
 
+
+
+
+
+
+
+
+
 const Diary = ({ navigation }) => {
     useEffect(() => {
         navigation.setOptions({
@@ -77,8 +85,6 @@ const Diary = ({ navigation }) => {
             
         });
     });
-
-    
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>

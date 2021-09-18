@@ -48,6 +48,10 @@ const DiaryWrite = ({ navigation }) => {
         }    
     };
 
+    
+    
+      
+
     return (
         <View style = {styles.container}>
             <Text style = {styles.text}>지금 나의 기분은</Text>

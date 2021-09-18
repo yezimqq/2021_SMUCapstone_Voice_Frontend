@@ -70,12 +70,13 @@ const DailyChart = ({ navigation }) => {
     const [moodGraphData, setMoodGraphData] = useState([]);
 
     const dateMoodData = useRef({
-        [currentDate]: {
-            verygood: Math.floor(Math.random()*100),
-			good: Math.floor(Math.random()*100),
-			normal: Math.floor(Math.random()*100),
-            bad: Math.floor(Math.random()*100),
-			verybad: Math.floor(Math.random()*100)
+        [currentDate]: { // today pie chart data
+            verygood: 1, 
+			good: 1,
+			normal: 2,
+            bad: 3,
+			verybad: 4
+            
 		}
     });
 
@@ -151,7 +152,7 @@ const DailyChart = ({ navigation }) => {
 				dayComponent = {({ date, state }) => {
 					if (!dateMoodData.current[date.dateString]) {
 						dateMoodData.current[date.dateString] = {
-							verygood: Math.floor(Math.random()*100), // 곱으로 비율조절가능
+							verygood: Math.floor(Math.random()*100),
 			                good: Math.floor(Math.random()*100),
 			                normal: Math.floor(Math.random()*100),
                             bad: Math.floor(Math.random()*100),
@@ -201,7 +202,7 @@ const DailyChart = ({ navigation }) => {
                         height = {250}
                         colorScale = {chartDataColor}
                         innerRadius = {50}
-				        labels = {() => null}
+				        labels = {({ datum }) => datum.y}
                     />
                     <VictoryLegend
                         width = {200}
