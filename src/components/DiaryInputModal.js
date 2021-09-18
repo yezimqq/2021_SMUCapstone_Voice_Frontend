@@ -51,12 +51,16 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                   value={title}
                   onChangeText={text => handleOnChangeText(text, 'title')}
                   placeholder='  제목을 입력해주세요.'
+                  placeholderTextColor = '#bebebe'
+                  returnKeyType = 'next'
                   style={[styles.inputTitle]}
               />
               <TextInput
                   value={content}
-                  multiline
                   placeholder='  내용을 입력해주세요.'
+                  placeholderTextColor = '#bebebe'
+                  textAlignVertical ='top' 
+                  multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능
                   style={[styles.inputContent]}
                   onChangeText={text => handleOnChangeText(text, 'content')}
               />
@@ -68,11 +72,11 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
               />
               {title.trim() || content.trim() ? (
               <RoundIconBtn
-                    size={15}
-                    style={{ marginLeft: 15 }}
-                   antIconName='close'
-                   onPress={closeModal}
-               />
+                  size={15}
+                  style={{ marginLeft: 15 }}
+                  antIconName='close'
+                  onPress={closeModal}
+              />
                ) : null}
             </View>
         </View>
@@ -98,13 +102,13 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         fontSize: 16,
         height: 40,
-        marginBottom: 15,
+        marginBottom: 10,
         fontWeight: 'bold',
     },
 
     inputContent: {
         width: '90%',
-        height: 200,
+        height: 150,
         borderWidth: 1,
         borderColor:'#cccccc',
         borderRadius: 4,

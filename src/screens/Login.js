@@ -34,7 +34,7 @@ const Login = ({ navigation }) => {
           
             if (res.success === id) {
                 AsyncStorage.setItem('access_token', res.access_token);
-                Alert.alert('', '로그인 성공');
+                Alert.alert('', '로그인 성공!');
                 dispatch({ LoginId: id, password: password });
             }
             else {
@@ -122,12 +122,13 @@ const styles = StyleSheet.create({
         height: 50,
         marginBottom: 20,
         justifyContent: "center",
-        padding: 20
+        padding: 20,
     },
   
     inputText: {
         height: 50,
-        color: "black"
+        color: "black",
+       
     },
   
     loginBtn: {

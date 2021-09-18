@@ -39,8 +39,8 @@ const DiaryDetail = props => {
 
   const displayDeleteAlert = () => {
       Alert.alert(
-          '다이어리를 삭제하시겠습니까?',
-          '삭제 버튼을 누르면 다이어리가 영구적으로 삭제됩니다!',
+          '삭제',
+          '삭제 버튼을 누르면 해당 감정일기가 영구적으로 삭제됩니다!',
       [
         {
           text: '삭제',

@@ -151,12 +151,12 @@ const DailyChart = ({ navigation }) => {
 				onPressArrowRight = {addMonth => addMonth()}
 				dayComponent = {({ date, state }) => {
 					if (!dateMoodData.current[date.dateString]) {
-						dateMoodData.current[date.dateString] = {
-							verygood: Math.floor(Math.random()*100),
-			                good: Math.floor(Math.random()*100),
-			                normal: Math.floor(Math.random()*100),
-                            bad: Math.floor(Math.random()*100),
-			                verybad: Math.floor(Math.random()*100)
+						dateMoodData.current[date.dateString] = {  /*Math.floor(Math.random()*100): 랜덤데이터*/
+							verygood: null,
+			                good: null,
+			                normal: null,
+                            bad: null,
+			                verybad: null
 						};
 					}
 					return (
@@ -202,7 +202,7 @@ const DailyChart = ({ navigation }) => {
                         height = {250}
                         colorScale = {chartDataColor}
                         innerRadius = {50}
-				        labels = {({ datum }) => datum.y}
+				        labels = {() => null}
                     />
                     <VictoryLegend
                         width = {200}
