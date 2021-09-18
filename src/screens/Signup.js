@@ -10,15 +10,15 @@ const Signup = ({ navigation }) => {
 
     const _handleSignupButton = () => {
         if(!id) {
-            alert('아이디를 입력해주세요.');
+            Alert.alert('','아이디를 입력해주세요.');
             return;
         }
         if(!password) {
-            alert('비밀번호를 입력해주세요.');
+            Alert.alert('','비밀번호를 입력해주세요.');
             return;
         }
         if(confirmpassword != password) {
-            alert('비밀번호가 일치하지 않습니다.');
+            Alert.alert('','비밀번호가 일치하지 않습니다.');
             return;
         }
         
@@ -34,10 +34,10 @@ const Signup = ({ navigation }) => {
         .then(res => res.json())
         .then(res => { 
             if (res.error) 
-                Alert.alert("안내", "이미 가입된 회원입니다");
+                Alert.alert('', '이미 가입된 회원입니다');
             else {
                 dispatch({ LoginId: id, password: password })
-                Alert.alert("안내", "가입 완료");
+                Alert.alert('', '가입 완료');
                 navigation.navigate('Login');
             }
         })

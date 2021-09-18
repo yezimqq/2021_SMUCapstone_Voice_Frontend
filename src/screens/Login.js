@@ -10,11 +10,11 @@ const Login = ({ navigation }) => {
 
     const _handleLoginButton = async () => {
         if(!id) {
-            alert('아이디를 입력해주세요.');
+            Alert.alert('','아이디를 입력해주세요.');
             return;
         }
         if(!password) {
-            alert('비밀번호를 입력해주세요.');
+            Alert.alert('','비밀번호를 입력해주세요.');
             return;
         }
         
@@ -34,11 +34,11 @@ const Login = ({ navigation }) => {
           
             if (res.success === id) {
                 AsyncStorage.setItem('access_token', res.access_token);
-                Alert.alert("안내", "로그인 성공");
+                Alert.alert('', '로그인 성공');
                 dispatch({ LoginId: id, password: password });
             }
             else {
-                Alert.alert("안내", "아이디와 비밀번호를 확인해주세요");
+                Alert.alert('', '아이디와 비밀번호를 확인해주세요');
             }
         })
 
