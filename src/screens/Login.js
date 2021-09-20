@@ -3,7 +3,6 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../contexts';
 
-
 const Login = ({ navigation }) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -18,11 +17,10 @@ const Login = ({ navigation }) => {
             Alert.alert('','비밀번호를 입력해주세요.');
             return;
         }
-        
-        fetch("http://13.124.78.167:8080/login", {
+
+        const response = await fetch("http://13.124.78.167:8080/login", {
             method: "POST",
             headers: { 
-                'Accept': 'application/json',
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({
@@ -30,34 +28,18 @@ const Login = ({ navigation }) => {
                 password: password,
             }),
         })
-        .then(res => res.json())
-        .then(res => {
-            console.log(res);
-          
-            if (res.success === id) {
-                AsyncStorage.setItem('access_token', res.access_token);
-                Alert.alert('', '로그인 성공!');
-                dispatch({ LoginId: id, password: password });
-            }
-            else {
-                Alert.alert('', '아이디와 비밀번호를 확인해주세요');
-            }
-        })
-
-        /* 로그인한 사람 관련 데이터 불러오기 (지금은 안 쓰니 일단 제외) 
-            fetch("http://13.124.78.167:8080/login", {
-                method: "POST",
-                headers: { 
-                    Authorization: AsyncStorage.getItem("access_token")
-                },
-            })
-            .then(response => response.json())
-            .then(response => {
-                console.log(response);
-            })
-        */
+        const json = await response.json()
+        const headers = await response.headers    
+        
+        if (json.success !== null) {
+            AsyncStorage.setItem('Authorization', headers.get("Authorization"));
+            Alert.alert('', '로그인 성공!');
+            dispatch({ LoginId: id, password: password });
+        }
+        else {
+            Alert.alert('', '아이디와 비밀번호를 확인해주세요');
+        }
     }
-
 
     return (
         <View style = {styles.container}>
