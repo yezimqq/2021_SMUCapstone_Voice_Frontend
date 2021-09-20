@@ -3,51 +3,11 @@ import React, { useState, useEffect } from 'react';
 import { View, StyleSheet, Text, ScrollView, TouchableWithoutFeedback, Keyboard, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
-
+import ShowDiary from '../../components/ShowDiary';
 import DiaryInputModal from '../../components/DiaryInputModal';
 import NotFound from '../../components/NotFound';
 import SearchBar from '../../components/SearchBar';
 import { useDiaryList } from '../../contexts/DiaryProvider';
-
-
-import CalendarStrip from 'react-native-calendar-strip';
-import 'moment';
-import 'moment/locale/ko';
-import ShowDiary from '../../components/ShowDiary';
-
-
-const locale = {
-    name: 'ko',
-    config: {
-        months: '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
-        monthsShort: '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
-        weekdays: '월요일_화요일_수요일_목요일_금요일_토요일_일요일'.split('_'),
-        weekdaysShort: '월_화_수_목_금_토_일'.split('_'),
-        weekdaysMin: '월_화_수_목_금_토_일'.split('_'),
-        longDateFormat: {
-            LT: 'HH:mm',
-            LTS: 'HH:mm:ss',
-            L: 'YYYY/MM/DD',
-            LL: 'YYYY MMMM D',
-            LLL: 'YYYY MMMM D LT',
-            LLLL: 'YYYY MMMM D dddd LT'
-        },    
-    }
-};
-
-const date = new Date();
-const time = new Date();
-
-const formatDate = (time) => {
-    if (Platform.OS === 'ios')
-        return `${time.getHours()}:${time.getMinutes()}`;
-    else {
-        if (time.getHours() < 12)
-            return `오전 ${time.getHours()}:${time.getMinutes()}`;
-        else
-            return `오후 ${time.getHours()-12}:${time.getMinutes()}`;
-    }    
-};
 
 
 
@@ -88,8 +48,8 @@ const DiaryScreen = ({ navigation }) => {
 
     const reverseDiaryList = reverseData(diaryList);
 
-    const handleOnSubmit = async (title, content) => {
-        const diary = { id: Date.now(), title, content, time: Date.now() };
+    const handleOnSubmit = async (emoji, title, content) => {
+        const diary = { id: Date.now(), emoji, title, content, time: Date.now() };
         const updatedDiaryList = [...diaryList, diary];
         setDiaryList(updatedDiaryList);
         await AsyncStorage.setItem('diaryList', JSON.stringify(updatedDiaryList));
@@ -168,7 +128,7 @@ const DiaryScreen = ({ navigation }) => {
                         <ShowDiary 
                             onPress = {() => openDiary(item)} 
                             item = {item} 
-                        />
+                        />                        
                     )}
                />
                )
@@ -200,7 +160,7 @@ const DiaryScreen = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     container: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 10,
         flex: 1,
         backgroundColor: 'white',
     },

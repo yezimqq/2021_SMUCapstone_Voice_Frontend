@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Modal, TextInput, TouchableWithoutFeedback, Keyboard, Text, Image } from 'react-native';
+import { StyleSheet, View, Modal, TextInput, TouchableWithoutFeedback, Keyboard, Text, Image, TouchableOpacity } from 'react-native';
 import DiaryIconBtn from './DiaryIconBtn';
 import { images } from '../images';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
 
 const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
@@ -9,12 +10,15 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
+    
+    
     const handleModalClose = () => {
         Keyboard.dismiss();
     };
 
     useEffect(() => {
         if (isEdit) {
+            setEmoji(diary.emoji);
             setTitle(diary.title);
             setContent(diary.content);
         }
@@ -22,14 +26,15 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
 
     const handleSubmit = () => {
-        if (!title.trim() && !content.trim())  // 아무것도 입력 안했을 시 
+        if (!title.trim() && !content.trim())  // 아무것도 입력 안했을 시 체크버튼 = modal 닫기
             return onClose();
 
         if (isEdit) {
-            onSubmit(title, content, Date.now());
+            onSubmit(emoji, title, content, Date.now());
         } 
         else {
-            onSubmit(title, content);
+            onSubmit(emoji, title, content);
+            setEmoji('');
             setTitle('');
             setContent('');
         }
@@ -38,6 +43,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
     const closeModal = () => {
         if (!isEdit) {
+            setEmoji('');
             setTitle('');
             setContent('');
         }
@@ -47,20 +53,69 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     return (
     <>  
     <Modal visible={visible} animationType='fade'>
+    <KeyboardAwareScrollView> 
         <View style={styles.container}>
             <Text style = {styles.headerText}> 지금 나의 기분은 </Text>
+         
             <View style = {styles.rowContainer}>
-                {emojiIcon.map((emojiOption, i) => (
-                    <Image
-                       key = {i}
-                       source = {emojiOption}
-                       style = {styles.emoji}
-                       onPress = {() => {
-                           setEmoji(emojiOption);
-                       }}
-                    />
-                ))}
+           
+                <View style = {styles.columnContainer}>
+                    {category_1.map((emojiOption, i) => (
+                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
+                            <Image
+                                key = {i}
+                                source = {emojiOption}
+                                style = {styles.emoji}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style = {styles.columnContainer}>
+                    {category_2.map((emojiOption, i) => (
+                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
+                            <Image
+                                key = {i}
+                                source = {emojiOption}
+                                style = {styles.emoji}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style = {styles.columnContainer}>
+                    {category_3.map((emojiOption, i) => (
+                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
+                            <Image
+                                key = {i}
+                                source = {emojiOption}
+                                style = {styles.emoji}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style = {styles.columnContainer}>
+                    {category_4.map((emojiOption, i) => (
+                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
+                            <Image
+                                key = {i}
+                                source = {emojiOption}
+                                style = {styles.emoji}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
+                <View style = {styles.columnContainer}>
+                    {category_5.map((emojiOption, i) => (
+                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
+                            <Image
+                                key = {i}
+                                source = {emojiOption}
+                                style = {styles.emoji}
+                            />
+                        </TouchableOpacity>
+                    ))}
+                </View>
             </View>
+            
 
             <View style={[styles.inputTitle]}>
                 <TextInput
@@ -90,6 +145,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                     antIconName = 'check'
                     onPress = {handleSubmit}
                 />
+
                 {title.trim() || content.trim() ? (
                     <DiaryIconBtn
                         size = {15}
@@ -100,21 +156,23 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                 ) : null}
             </View>
         </View>
-        <TouchableWithoutFeedback onPress={handleModalClose}>
-            <View style={[styles.modalBG, StyleSheet.absoluteFillObject]} />
-        </TouchableWithoutFeedback>
+       
+            <TouchableWithoutFeedback onPress={handleModalClose}>
+                <View style={[styles.modalBG, StyleSheet.absoluteFillObject]} />
+            </TouchableWithoutFeedback>
+
+        </KeyboardAwareScrollView>
     </Modal>
     </>
   );
 };
 
-const emojiIcon = [ 
-    images.verygood, 
-    images.good, 
-    images.normal, 
-    images.bad, 
-    images.verybad, 
-];
+/* ----- 매우 좋음(1), 좋음(2), 보통(3), 나쁨(4), 매우 나쁨(5) 카테고리 ----- */ 
+const category_1 = [ images.verygood, images.happy, images.pleased, images.fantastic, images.great ]; 
+const category_2 = [ images.good, images.pound, images.comfortable, images.fun, images.excited ];
+const category_3 = [ images.normal, images.boring, images.awkward, images.dontknow, images.umm ];
+const category_4 = [ images.bad, images.frown, images.uncomfortable, images.blue, images.annoyed ];
+const category_5 = [ images.verybad, images.terrible, images.gross, images.sad, images.angry ];
 
 
 /*const SetColor = ({ emoji }) => {
@@ -140,7 +198,8 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 25,
         fontWeight: 'bold',
-        marginBottom: 20,
+        marginTop: 100,
+        marginBottom: 10,
     },
 
     rowContainer: {
@@ -149,12 +208,17 @@ const styles = StyleSheet.create({
         marginVertical: 5,
     },
 
+    columnContainer: {
+        flexDirection: 'column',
+        alignContent: 'space-between',
+        marginVertical: 5,
+    },
+
     emoji: {
         width: 50,
         height: 50,
-        marginHorizontal: 1,
-        marginRight: 5,
-        marginLeft: 5,
+        marginHorizontal: 5,
+        marginTop: 10,
     },
 
     emojiText: {

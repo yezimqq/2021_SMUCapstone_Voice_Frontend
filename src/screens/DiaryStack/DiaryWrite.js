@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+/*import React, {useState} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Platform, TextInput } from 'react-native'; 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Icon from 'react-native-vector-icons/FontAwesome';
@@ -181,4 +181,4 @@ const styles = StyleSheet.create({
 
 });
 
-export default DiaryWrite;
+export default DiaryWrite;*/

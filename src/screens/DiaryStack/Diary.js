@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+/*import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import CalendarStrip from 'react-native-calendar-strip';
@@ -6,7 +6,7 @@ import 'moment';
 import 'moment/locale/ko';
 import { images } from '../../images';
 
-/*const locale = {
+const locale = {
     name: 'ko',
     config: {
         months: '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
@@ -59,14 +59,6 @@ const Diarys = [
     }
 ]
 
-*/
-
-
-
-
-
-
-
 
 const Diary = ({ navigation }) => {
     useEffect(() => {
@@ -89,7 +81,7 @@ const Diary = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-           <CalendarStrip
+           {<CalendarStrip
                 scrollable
                 selectedDate={date}
                 style={{height:100, paddingTop: 10, paddingBottom: 5, marginTop: 10 }}
@@ -170,4 +162,4 @@ const styles = StyleSheet.create({
     
 });
 
-export default Diary;
+export default Diary; */

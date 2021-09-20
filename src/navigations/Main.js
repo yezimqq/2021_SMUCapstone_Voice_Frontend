@@ -3,7 +3,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../screens';
 import { ChatList, Chat, ChatSetting, AudioRecording, AudioStorage } from '../screens';
-import { Diary, DiarySetting, DiaryWrite, DiaryScreen, DiaryDetail } from '../screens'; 
+import { DiaryScreen, DiaryDetail } from '../screens'; 
 import { DailyChart, MonthlyChart } from '../screens';
 import Icon from 'react-native-vector-icons/Ionicons';
 
@@ -30,8 +30,8 @@ const HomeStack = () => {
             />
 
             <Stack.Screen
-                name = "Diary" 
-                component = {Diary}
+                name = "DiaryScreen" 
+                component = {DiaryScreen}
                 options = {{
                     headerTitle: "감정일기",
                     headerTintColor: 'white',
@@ -145,7 +145,7 @@ const DiaryStack  = () => {
         <Stack.Navigator
             initialRouteName = 'DiaryScreen'
         >
-            <Stack.Screen
+           {/*} <Stack.Screen
                 name = "Diary" 
                 component = {Diary}
                 options = {{
@@ -185,7 +185,7 @@ const DiaryStack  = () => {
                     },
                     headerBackTitleVisible: false,
                 }}
-            />     
+            />     */}
 
 
             <Stack.Screen

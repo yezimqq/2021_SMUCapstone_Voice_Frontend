@@ -1,4 +1,4 @@
-import React from 'react';
+/*import React from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'; 
 import { images } from '../../images';
 
@@ -96,4 +96,4 @@ const styles = StyleSheet.create({
     
 });
 
-export default DiarySetting;
+export default DiarySetting;*/
