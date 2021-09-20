@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Platform, StyleSheet, Text, View, Button, Image, TouchableOpacity, TextInput } from 'react-native';
+import { Platform, StyleSheet, Text, View, Alert, Image, TouchableOpacity, TextInput } from 'react-native';
 import { RadioButton } from 'react-native-paper';
-//import { images } from '../../images';
 import * as ImagePicker from 'expo-image-picker';
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const ChatSetting = ({ navigation }) => {
+    const [id, setId] = useState(0);
     const [image, setImage] = useState();
     const [name, setName] = useState();
     const [mode, setMode] = useState('unformal');
@@ -36,13 +36,56 @@ const ChatSetting = ({ navigation }) => {
             setImage(result.uri);
         }
     };
+    
+    const _handleSaveButton = () => {
+        
+        if (!image) {
+            Alert.alert('','이미지를 선택해주세요.');
+            return;
+        }
+        if (!name) {
+            Alert.alert('','이름을 입력해주세요.');
+            return;
+        }
+        
+        //await 관련 검색해서 나온 내용 보고 참고한거
+        async function fetchSettingStatus() {
+            const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
+                method: "POST",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
 
+                },
+
+                //서버에서 id받아와서 지정 해야함 (imageFieldId: 1, modeId: 1 or 2, name: 중복 불가)
+                body: JSON.stringify({
+                    imageFiledId: 1,
+                    modeId: 2,
+                    name: "길민호",
+                    voiceId: 8,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        }
+
+        fetchSettingStatus().then(res => {
+            console.log("res", res);
+        })       
+    }   
+    
 
     return (
         <View style = {styles.container}>   
-
+            
             <TouchableOpacity onPress={pickImage} style={[styles.profileContainer, styles.profile]}>
-                {/*<Text style={styles.profileText}>프로필 선택</Text> -> 겹치게 해서 글씨 없어지게 하기*/}
                 {image && <Image source={{ uri: image }} style={styles.profile} />}
             </TouchableOpacity>
 
@@ -77,10 +120,9 @@ const ChatSetting = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={[styles.audioBtn, styles.saveBtn]}
-                onPress={() => navigation.navigate('Chat', {userName: name})}>
+                onPress={_handleSaveButton/*() => navigation.navigate('Chat' , {uesrProfile: image, userName: name, mode: mode })*/}>
                 <Text style={styles.btnText}>저장</Text>
             </TouchableOpacity>
-
         </View>
     );
 };
