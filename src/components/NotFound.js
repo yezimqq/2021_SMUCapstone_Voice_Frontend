@@ -10,7 +10,7 @@ const NotFound = () => {
             size={90} 
             color='#bebebe' 
         />
-        <Text style={styles.NotFoundMessage}>
+        <Text style = {styles.NotFoundMessage}>
             Result Not Found
         </Text>
     </View>

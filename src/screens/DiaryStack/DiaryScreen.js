@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet,Text,StatusBar,TouchableWithoutFeedback, Keyboard, FlatList, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, ScrollView, TouchableWithoutFeedback, Keyboard, FlatList, TouchableOpacity } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 
 
@@ -13,7 +13,7 @@ import { useDiaryList } from '../../contexts/DiaryProvider';
 import CalendarStrip from 'react-native-calendar-strip';
 import 'moment';
 import 'moment/locale/ko';
-import HandleOnPress from '../../components/HandleOnPress';
+import ShowDiary from '../../components/ShowDiary';
 
 
 const locale = {
@@ -107,7 +107,9 @@ const DiaryScreen = ({ navigation }) => {
             return await findDiaryList();
         }
         const filteredDiaryList = diaryList.filter(diary => {
-            if (diary.title.toLowerCase().includes(text.toLowerCase())) {
+            if (diary.title.toLowerCase().includes(text.toLowerCase())
+                || diary.content.toLowerCase().includes(text.toLowerCase())
+            ) {
             return diary;
             }
         });
@@ -129,7 +131,7 @@ const DiaryScreen = ({ navigation }) => {
     return (
 
     <>
-    <CalendarStrip
+    {/*<CalendarStrip
         scrollable
         selectedDate={date}
         style={{height:100, paddingTop: 10, paddingBottom: 5, marginTop: 10 }}
@@ -141,75 +143,79 @@ const DiaryScreen = ({ navigation }) => {
         highlightDateNumberStyle={{color: 'black', fontSize: 20}}
         highlightDateNameStyle={{color: 'black', fontSize: 15}}
         daySelectionAnimation={{ type: 'background', highlightColor: '#dedede' }}
-    />
+    />*/}
      
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
-          {diaryList.length ? (
-            <SearchBar
-              value={searchQuery}
-              onChangeText={handleOnSearchInput}
-              containerStyle={{ marginVertical: 15 }}
-              onClear={handleOnClear}
-            />
-          ) : null}
-
-          {resultNotFound ? (
-            <NotFound />
-          ) : (
-            <FlatList
-              data={reverseDiaryList}
-              numColumns={2}
-              columnWrapperStyle={{
-                justifyContent: 'space-between',
-                marginBottom: 15,
-              }}
-              keyExtractor={item => item.id.toString()}
-              renderItem={({ item }) => (
-                <HandleOnPress onPress={() => openDiary(item)} item={item} />
-              )}
-            />
-          )}
-
+            {diaryList.length ? (
+                <SearchBar
+                    value = {searchQuery}
+                    onChangeText = {handleOnSearchInput}
+                    containerStyle={{ marginVertical: 15 }}
+                    onClear={handleOnClear}
+                />
+            ) : null}
+            
+            
+            {resultNotFound ? (
+                <NotFound />
+            ) : (
+                <FlatList
+                    data = {reverseDiaryList}
+                    numColumns = {1}
+                    keyExtractor = {item => item.id.toString()}
+                    renderItem = {({ item }) => (
+                        <ShowDiary 
+                            onPress = {() => openDiary(item)} 
+                            item = {item} 
+                        />
+                    )}
+               />
+               )
+            }
+        
           {!diaryList.length ? (
-            <View
-              style={[
-                StyleSheet.absoluteFillObject,
-                styles.emptyMessageContainer,
-              ]}
-            >
-              <Text style={styles.emptyMessage}>Please Add your Diary</Text>
-            </View>
+              <View
+                  style = {[
+                      StyleSheet.absoluteFillObject,
+                      styles.emptyMessageContainer,
+                  ]}
+              >
+                  <Text style = {styles.emptyMessage}>Please Add your Diary</Text>
+              </View>
           ) : null}
         </View>
-      </TouchableWithoutFeedback>
-      <DiaryInputModal
-        visible={modalVisible}
-        onClose={() => setModalVisible(false)}
-        onSubmit={handleOnSubmit}
-      />
+        
+    </TouchableWithoutFeedback>
+    
+    <DiaryInputModal    // 다이어리 작성 modal
+        visible = {modalVisible}
+        onClose = {() => setModalVisible(false)}
+        onSubmit = {handleOnSubmit}
+    />
+    
     </>
-  );
+);
 };
 
 const styles = StyleSheet.create({
-  container: {
-    paddingHorizontal: 20,
-    flex: 1,
-    backgroundColor: 'white',
-  },
+    container: {
+        paddingHorizontal: 20,
+        flex: 1,
+        backgroundColor: 'white',
+    },
 
-  emptyMessageContainer: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
+    emptyMessageContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
 
-  emptyMessage: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    opacity: 0.2,
-  },
+    emptyMessage: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        opacity: 0.2,
+    },
  
 });
 

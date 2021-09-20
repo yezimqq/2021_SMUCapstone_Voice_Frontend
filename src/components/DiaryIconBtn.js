@@ -6,11 +6,11 @@ import { AntDesign } from '@expo/vector-icons';
 const DiaryIconBtn = ({ antIconName, size, color, style, onPress }) => {
     return (
     <AntDesign
-        name={antIconName}
-        size={size || 18}
-        color={color || 'white'}
-        style={[styles.icon, { ...style }]}
-        onPress={onPress}
+        name = {antIconName}
+        size = {size || 18}
+        color = {color || 'white'}
+        style = {[styles.icon, { ...style }]}
+        onPress = {onPress}
     />
   );
 };

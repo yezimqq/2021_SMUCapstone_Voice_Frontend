@@ -6,7 +6,7 @@ import 'moment';
 import 'moment/locale/ko';
 import { images } from '../../images';
 
-const locale = {
+/*const locale = {
     name: 'ko',
     config: {
         months: '1월_2월_3월_4월_5월_6월_7월_8월_9월_10월_11월_12월'.split('_'),
@@ -37,7 +37,7 @@ const formatDate = (time) => {
         else
             return `오후 ${time.getHours()-12}:${time.getMinutes()}`;
     }    
-};
+}; 
 
 //예시 data
 const Diarys = [
@@ -59,6 +59,7 @@ const Diarys = [
     }
 ]
 
+*/
 
 
 
@@ -88,7 +89,7 @@ const Diary = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1, backgroundColor: 'white' }}>
-            <CalendarStrip
+           <CalendarStrip
                 scrollable
                 selectedDate={date}
                 style={{height:100, paddingTop: 10, paddingBottom: 5, marginTop: 10 }}
@@ -100,7 +101,7 @@ const Diary = ({ navigation }) => {
                 highlightDateNumberStyle={{color: 'black', fontSize: 20}}
                 highlightDateNameStyle={{color: 'black', fontSize: 15}}
                 daySelectionAnimation={{ type: 'background', highlightColor: '#dedede' }}
-            />
+            /> 
 
             <FlatList 
                 data={Diarys}
