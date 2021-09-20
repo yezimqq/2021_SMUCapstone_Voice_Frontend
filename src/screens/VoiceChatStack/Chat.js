@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { View, TouchableOpacity, StyleSheet } from 'react-native';
 import { Bubble, GiftedChat, Send, Composer } from 'react-native-gifted-chat';
 import Feather from 'react-native-vector-icons/Feather';
@@ -6,9 +6,12 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Audio } from 'expo-av';
 
+
+
 const Chat = ({ navigation }) => {
     const [messages, setMessages] = useState([]);
     const [recording, setRecording] = useState();
+    
 
     useEffect(() => {
         navigation.setOptions({
@@ -36,6 +39,11 @@ const Chat = ({ navigation }) => {
                 </View>
             ),
         }),
+
+    
+       
+            
+            
 
             setMessages([
                 {
@@ -167,6 +175,7 @@ const Chat = ({ navigation }) => {
         />
     );
 };
+
 
 const styles = StyleSheet.create({
     container: {

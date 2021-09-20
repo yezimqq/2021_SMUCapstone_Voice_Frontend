@@ -63,40 +63,41 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
             </View>
 
             <View style={[styles.inputTitle]}>
-              <TextInput
-                  value={title}
-                  onChangeText={text => setTitle(text)}
-                  placeholder='제목을 입력해주세요.'
-                  placeholderTextColor = '#bebebe'
-                  returnKeyType = 'next'
-                  style={{marginLeft: 10}}
-              />
+                <TextInput
+                    value={title}
+                    onChangeText={text => setTitle(text)}
+                    placeholder='제목을 입력해주세요.'
+                    placeholderTextColor = '#bebebe'
+                    returnKeyType = 'next'
+                    style={{marginLeft: 10}}
+                />
             </View>
             <View style={[styles.inputContent]}>
-              <TextInput
-                  value={content}
-                  placeholder='내용을 입력해주세요.'
-                  placeholderTextColor = '#bebebe'
-                  textAlignVertical ='top' 
-                  multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능
-                  style={{marginLeft: 10}}
-                  onChangeText={text => setContent(text)}
-              />
+                <TextInput
+                    value={content}
+                    placeholder='내용을 입력해주세요.'
+                    placeholderTextColor = '#bebebe'
+                    textAlignVertical ='top' 
+                    multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능
+                    style={{marginLeft: 10}}
+                    onChangeText={text => setContent(text)}
+               />
             </View>
-              <View style={styles.btnContainer}>
-              <DiaryIconBtn
-                  size = {15}
-                  antIconName = 'check'
-                  onPress = {handleSubmit}
-              />
-              {title.trim() || content.trim() ? (
-              <DiaryIconBtn
-                  size = {15}
-                  style = {{ marginLeft: 15 }}
-                  antIconName = 'close'
-                  onPress = {closeModal}
-              />
-               ) : null}
+
+            <View style={styles.btnContainer}>
+                <DiaryIconBtn
+                    size = {15}
+                    antIconName = 'check'
+                    onPress = {handleSubmit}
+                />
+                {title.trim() || content.trim() ? (
+                    <DiaryIconBtn
+                        size = {15}
+                        style = {{ marginLeft: 15 }}
+                        antIconName = 'close'
+                        onPress = {closeModal}
+                />
+                ) : null}
             </View>
         </View>
         <TouchableWithoutFeedback onPress={handleModalClose}>

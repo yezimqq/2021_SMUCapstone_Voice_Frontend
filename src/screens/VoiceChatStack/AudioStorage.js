@@ -13,7 +13,7 @@ const AudioStorage = ({ navigation }) => {
         navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity
-                    onPress = {() => alert('폴더 생성')}
+                    onPress = {() => (null)}
                 >
                 <Icon
                     name = 'addfolder'

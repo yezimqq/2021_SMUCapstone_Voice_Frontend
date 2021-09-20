@@ -85,8 +85,8 @@ const MonthlyChart = ({ navigation }) => {
                     style={{ data: { width: 15 } }}
                     //horizontal ={true}
                 >   
-                    {/* 매우 좋음 data */}
-                    <VictoryBar
+                    
+                    <VictoryBar   // 매우 좋음
                         data={[
                             { x: '1', y: Math.floor(Math.random()*100) },
                             { x: '2', y: Math.floor(Math.random()*100) },
@@ -103,8 +103,8 @@ const MonthlyChart = ({ navigation }) => {
                         ]}
                     />
 
-                    {/* 좋음 data */}
-                    <VictoryBar
+                   
+                    <VictoryBar    // 좋음
                         data={[
                             { x: '1', y: Math.floor(Math.random()*100) },
                             { x: '2', y: Math.floor(Math.random()*100) },
@@ -121,8 +121,26 @@ const MonthlyChart = ({ navigation }) => {
                         ]}
                     />
 
-                    {/* 보통 data */}
-                    <VictoryBar
+                   
+                    <VictoryBar    // 보통
+                        data={[ 
+                            { x: '1', y: Math.floor(Math.random()*100) },
+                            { x: '2', y: Math.floor(Math.random()*100) },
+                            { x: '3', y: Math.floor(Math.random()*100) },
+                            { x: '4', y: Math.floor(Math.random()*100) },
+                            { x: '5', y: Math.floor(Math.random()*100) },
+                            { x: '6', y: Math.floor(Math.random()*100) },
+                            { x: '7', y: Math.floor(Math.random()*100) },
+                            { x: '8', y: Math.floor(Math.random()*100) },
+                            { x: '9', y: Math.floor(Math.random()*100) },
+                            { x: '10', y: Math.floor(Math.random()*100) },
+                            { x: '11', y: Math.floor(Math.random()*100) },
+                            { x: '12', y: Math.floor(Math.random()*100) },
+                        ]}
+                    />
+
+                    
+                    <VictoryBar    // 나쁨
                         data={[
                             { x: '1', y: Math.floor(Math.random()*100) },
                             { x: '2', y: Math.floor(Math.random()*100) },
@@ -139,8 +157,8 @@ const MonthlyChart = ({ navigation }) => {
                         ]}
                     />
 
-                    {/* 나쁨 data */}
-                    <VictoryBar
+                    
+                    <VictoryBar    // 매우 나쁨
                         data={[
                             { x: '1', y: Math.floor(Math.random()*100) },
                             { x: '2', y: Math.floor(Math.random()*100) },
@@ -154,29 +172,11 @@ const MonthlyChart = ({ navigation }) => {
                             { x: '10', y: Math.floor(Math.random()*100) },
                             { x: '11', y: Math.floor(Math.random()*100) },
                             { x: '12', y: Math.floor(Math.random()*100) },
-                        ]}
-                    />
-
-                    {/* 매우 나쁨 data */}
-                    <VictoryBar
-                        data={[
-                            { x: '1', y: Math.floor(Math.random()*100) },
-                            { x: '2', y: Math.floor(Math.random()*100) },
-                            { x: '3', y: Math.floor(Math.random()*100) },
-                            { x: '4', y: Math.floor(Math.random()*100) },
-                            { x: '5', y: Math.floor(Math.random()*100) },
-                            { x: '6', y: Math.floor(Math.random()*100) },
-                            { x: '7', y: Math.floor(Math.random()*100) },
-                            { x: '8', y: Math.floor(Math.random()*100) },
-                            { x: '9', y: Math.floor(Math.random()*100) },
-                            { x: '10', y: Math.floor(Math.random()*100) },
-                            { x: '11', y: Math.floor(Math.random()*100) },
-                            { x: '12', y: Math.floor(Math.random()*100) },
-                        ]}
+                        ]} 
                     />
                 </VictoryStack>
             </VictoryChart>
-    
+        
 
             <View style = {styles.line} />
             {/*<Text style = {styles.title}> {currentMonth} 월 </Text> */}

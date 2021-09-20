@@ -28,7 +28,7 @@ const Home = ({ navigation }) => {
         <View style={styles.container}>
             <TouchableOpacity 
                 style ={styles.box_01}
-                onPress = {() => navigation.navigate('Diary')}
+                onPress = {() => navigation.navigate('DiaryScreen')}
             >
                 <Text style={styles.text}>현재 나의 감정</Text>
                 <Text style={[styles.text, {color: '#64a1d0'}]}>보통</Text>

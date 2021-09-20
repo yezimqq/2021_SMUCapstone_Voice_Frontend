@@ -244,7 +244,7 @@ const DailyChart = ({ navigation }) => {
                     data = {moodGraphData}
                 />
             </VictoryChart>
-            <VictoryChart>
+          {/*}  <VictoryChart>
                 <VictoryBar
                     style={{ data: { fill: '#bebebe' } }}
                     animate = {{
@@ -253,7 +253,7 @@ const DailyChart = ({ navigation }) => {
                     }}
                     data = {moodGraphData}
                 />
-            </VictoryChart>
+                </VictoryChart> */}
     </ScrollView>
   );
 

@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'reac
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../contexts';
 
+
 const Login = ({ navigation }) => {
     const [id, setId] = useState('');
     const [password, setPassword] = useState('');
@@ -21,6 +22,7 @@ const Login = ({ navigation }) => {
         fetch("http://13.124.78.167:8080/login", {
             method: "POST",
             headers: { 
+                'Accept': 'application/json',
                 "Content-Type": "application/json",
             },
             body: JSON.stringify({

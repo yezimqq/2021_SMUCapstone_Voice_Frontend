@@ -4,10 +4,12 @@ import { RadioButton } from 'react-native-paper';
 //import { images } from '../../images';
 import * as ImagePicker from 'expo-image-picker';
 
+
 const ChatSetting = ({ navigation }) => {
     const [image, setImage] = useState();
     const [name, setName] = useState();
     const [mode, setMode] = useState('unformal');
+    const [voice, setVoice] = useState();
 
     useEffect(() => {
         (async () => {
@@ -34,6 +36,7 @@ const ChatSetting = ({ navigation }) => {
             setImage(result.uri);
         }
     };
+
 
     return (
         <View style = {styles.container}>   

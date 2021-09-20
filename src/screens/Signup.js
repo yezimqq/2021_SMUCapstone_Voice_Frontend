@@ -25,7 +25,10 @@ const Signup = ({ navigation }) => {
 
         fetch("http://13.124.78.167:8080/signUp", {
             method: "POST",
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 
+                'Accept': 'application/json',
+                'Content-Type': 'application/json' 
+            },
             body: JSON.stringify({
                 loginId: id,
                 password: password,
