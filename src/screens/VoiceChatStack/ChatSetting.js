@@ -3,9 +3,10 @@ import { Platform, StyleSheet, Text, View, Alert, Image, TouchableOpacity, TextI
 import { RadioButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { createChannel } from '../../../utils/firebase';
 
 const ChatSetting = ({ navigation }) => {
-    const [id, setId] = useState(0);
+    //const [id, setId] = useState();
     const [image, setImage] = useState();
     const [name, setName] = useState();
     const [mode, setMode] = useState('unformal');
@@ -62,8 +63,8 @@ const ChatSetting = ({ navigation }) => {
                 body: JSON.stringify({
                     imageFiledId: 1,
                     modeId: 2,
-                    name: "길민호",
-                    voiceId: 8,
+                    name: name,
+                    voiceId: 3,
                 }),
             });
 
@@ -76,10 +77,12 @@ const ChatSetting = ({ navigation }) => {
             return res;
         }
 
-        fetchSettingStatus().then(res => {
-            console.log("res", res);
+        fetchSettingStatus().then(async res => {
+            console.log("res: ", res);
+            const id = await createChannel({ image, name });
+            navigation.replace('Chat', { id, name });
         })       
-    }   
+    }
     
 
     return (
@@ -120,7 +123,7 @@ const ChatSetting = ({ navigation }) => {
             </TouchableOpacity>
             <TouchableOpacity 
                 style={[styles.audioBtn, styles.saveBtn]}
-                onPress={_handleSaveButton/*() => navigation.navigate('Chat' , {uesrProfile: image, userName: name, mode: mode })*/}>
+                onPress={_handleSaveButton}>
                 <Text style={styles.btnText}>저장</Text>
             </TouchableOpacity>
         </View>
