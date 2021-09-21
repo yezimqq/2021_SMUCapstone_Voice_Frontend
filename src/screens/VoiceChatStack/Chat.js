@@ -1,18 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
-import { View, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
+import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
 import { Bubble, GiftedChat, Send, Composer } from 'react-native-gifted-chat';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Audio } from 'expo-av';
 
-
-
-const Chat = ({ navigation }) => {
+const Chat = ({ navigation, route: { params } }) => {
     const [messages, setMessages] = useState([]);
     const [recording, setRecording] = useState();
     
-
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -26,7 +23,6 @@ const Chat = ({ navigation }) => {
                             style={styles.headerIcon}
                         />
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         onPress={() => { }}>
                         <FontAwesome
@@ -38,35 +34,11 @@ const Chat = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             ),
-        }),
+        });
+    }, []);
 
-    
-       
-            
-            
-
-            setMessages([
-                {
-                    _id: 1,
-                    text: 'Hello developer',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 2,
-                        name: 'React Native',
-                        avatar: 'https://placeimg.com/140/140/any',
-                    },
-                },
-                {
-                    _id: 2,
-                    text: 'Hello world',
-                    createdAt: new Date(),
-                    user: {
-                        _id: 1,
-                        name: 'React Native',
-                        avatar: 'https://placeimg.com/140/140/any',
-                    },
-                },
-            ]);
+    useLayoutEffect(() => {
+        navigation.setOptions({ headerTitle: params.name || '채팅방'});
     }, []);
 
     const onSend = useCallback((messages = []) => {
