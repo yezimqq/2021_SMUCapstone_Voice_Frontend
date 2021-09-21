@@ -1,6 +1,6 @@
 import React from 'react';
 import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
-import DiaryInputModal from './DiaryInputModal';
+
 
 /* ----- onPress diary => show detail, can edit/delete ----- */
 const ShowDiary = ({ item, onPress }) => {
