@@ -47,6 +47,62 @@ const ChatList = ({ navigation, route }) => {
         return () => unsubscribe();
     }, []);
 
+    //GET - chatBot Id로 유저의 챗봇 조회 API 연결
+    const _handleGetChatBotById  = ( chatbotId ) => {
+        async function getChatBotById() {
+            const response = await fetch(`http://13.124.78.167:8080/chat/chatBot/${chatbotId}`, {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    chatBotId: chatbotId,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        getChatBotById().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //DELETE - 챗봇 삭제 API 연결
+    const _handleDeleteChatBot = ( chatbotId ) => {
+        async function deleteChatBot() {
+            const response = await fetch(`http://13.124.78.167:8080/chat/chatBot/${chatbotId}`, {
+                method: "DELETE",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    chatBotId: chatbotId,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        deleteChatBot().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
     return (
         <View style={styles.container}>
             <FlatList
