@@ -165,6 +165,37 @@ const AudioStorage = ({ navigation }) => {
           console.log(result); // can see directory path
     };
 
+    //POST - 음성 생성 API 연결
+    const _handlePostVoice = ({ id, name }) => {
+        async function postVoice() {
+            const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
+                method: "POST",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+
+                },
+                body: JSON.stringify({
+                    id: id,
+                    name: name,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        }
+
+        postVoice().then(async res => {
+            console.log("res: ", res);
+            navigation.navigate('AudioStorage');
+        })       
+    }
+
     return (
         <View style={styles.container}>
             {isLoading && <Text>Loading......</Text>}
