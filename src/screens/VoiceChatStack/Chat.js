@@ -133,6 +133,173 @@ const Chat = ({ navigation, route: { params } }) => {
         console.log('Recording stopped and stored at', uri);
     }
 
+    //GET - chatBot Id로 대화 내용 조회 API 연결
+    const _handleGetMsgByChatBotId  = (chatbotId) => {
+        async function getMsgByChatBotId() {
+            const response = await fetch("http://13.124.78.167:8080/chat", {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    chatBotId: chatbotId,
+                })
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        getMsgByChatBotId().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //PUT - 메시지 생성 API 연결
+    const _handlePutMessages = (chatbotId) => {
+        async function putMessages() {
+            const response = await fetch("http://13.124.78.167:8080/chat", {
+                method: "PUT",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+
+                },
+                body: JSON.stringify({
+                    botId: chatbotId,
+                    createDate: new Date(),
+                    id: 2,
+                    isBot: 1,
+                    text: messages,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        putMessages().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //GET - 유저의 챗봇 조회 API 연결
+    const _handleGetChatBot = () => {
+        async function getChatBot() {
+            const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: null,
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        getChatBot().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //GET - 어체 조회 API 연결
+    const _handleGetMode = () => {
+        async function getMode() {
+            const response = await fetch("http://13.124.78.167:8080/chat/mode", {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: null,
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        getMode().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //GET - 음성 조회 API 연결
+    const _handleGetVoice = () => {
+        async function getVoice() {
+            const response = await fetch("http://13.124.78.167:8080/chat/voice", {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: null,
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        getVoice().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
+    //DELETE - 음성 삭제 API
+    const _handleDeleteChatBot = (voiceId) => {
+        async function deleteChatBot() {
+            const response = await fetch(`http://13.124.78.167:8080/chat/voice/${voiceId}`, {
+                method: "DELETE",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    voiceId: voiceId
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        deleteChatBot().then(async res => {
+            console.log("res: ", res);
+        });
+    };
+
     return (
         <GiftedChat
             messages={messages}
