@@ -49,7 +49,7 @@ const ChatSetting = ({ navigation }) => {
             return;
         }
         
-        //await 관련 검색해서 나온 내용 보고 참고한거
+        //POST - 챗봇 생성 API 연결 - completed
         async function fetchSettingStatus() {
             const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
                 method: "POST",
