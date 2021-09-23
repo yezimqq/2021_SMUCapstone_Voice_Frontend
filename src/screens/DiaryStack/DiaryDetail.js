@@ -1,14 +1,15 @@
+import { Alert, Image, StyleSheet, Text, View } from 'react-native';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Alert, Image } from 'react-native';
-import DiaryIconBtn from '../../components/DiaryIconBtn';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDiaryList } from '../../contexts/DiaryProvider';
-import DiaryInputModal from '../../components/DiaryInputModal';
 
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import DiaryIconBtn from '../../components/DiaryIconBtn';
+import DiaryInputModal from '../../components/DiaryInputModal';
+import { useDiaryList } from '../../contexts/DiaryProvider';
 
 /* -----  create/update diary date -----*/
 const formatDate = ms => {
     const date = new Date(ms);
+    console.log(date)
     const year = date.getFullYear();
     const month = date.getMonth() + 1 <10
         ? '0' + (date.getMonth() + 1)
@@ -31,19 +32,13 @@ const formatDate = ms => {
 
 
 const DiaryDetail = (props) => {
-    const [diary, setDiary] = useState(props.route.params.diary);
-    const { setDiaryList } = useDiaryList();
+    const { deleteDiary, updateDiary, diaryList } = useDiaryList();
+    const diary = diaryList.find(v => v.id === props.route.params.diary.id);
     const [showModal, setShowModal] = useState(false);
     const [isEdit, setIsEdit] = useState(false);
 
-    const deleteDiary = async () => {
-        const result = await AsyncStorage.getItem('diaryList');
-        let diaryList = [];
-        if (result !== null) diaryList = JSON.parse(result);
-
-        const newDiaryList = diaryList.filter(n => n.id !== diary.id);
-        setDiaryList(newDiaryList);
-        await AsyncStorage.setItem('diaryList', JSON.stringify(newDiaryList));
+    const handleDeleteDiary = async () => {
+        deleteDiary(diary.id)
         props.navigation.goBack();
     };
 
@@ -52,7 +47,7 @@ const DiaryDetail = (props) => {
             '삭제',
             '삭제 버튼을 누르면 해당 감정일기가 영구적으로 삭제됩니다!',
             [
-                { text: '삭제', onPress: deleteDiary },
+                { text: '삭제', onPress: handleDeleteDiary },
                 { text: '취소', onPress: () => console.log('canceled')},
             ], 
             { 
@@ -61,26 +56,13 @@ const DiaryDetail = (props) => {
         )
     };
 
-    const handleUpdate = async (emoji, title, content, time) => {
-        const result = await AsyncStorage.getItem('diaryList');
-        let diaryList = [];
-        if (result !== null) diaryList = JSON.parse(result);
-
-        const newDiaryList = diaryList.filter(n => {
-            if (n.id === diary.id) {
-                n.emoji = emoji;
-                n.title = title;
-                n.content = content;
-                n.isUpdated = true;
-                n.time = time;
-
-            setDiary(n);
-            }
-            return n;
-        });
-        
-        setDiaryList(newDiaryList);
-        await AsyncStorage.setItem('diaryList', JSON.stringify(newDiaryList));
+    const handleUpdate = async (newDiary) => {
+        updateDiary({
+            id:diary.id,
+            isUpdated:true,
+            updatedTime: Date.now(),
+            ...newDiary
+        })
     };
   
     const handleOnClose = () => setShowModal(false);
@@ -90,13 +72,15 @@ const DiaryDetail = (props) => {
         setShowModal(true);
     };
 
+    if(!diary) return null
+
     return (
     
     <>
         <View style = {[styles.container]}>
             <Text style = {styles.time}>
                 {diary.isUpdated? 
-                    `Updated At ${formatDate(diary.time)}`   // 다이어리 수정 시간
+                    `Updated At ${formatDate(diary.updatedTime)}`   // 다이어리 수정 시간
                 :   `Created At ${formatDate(diary.time)}`   // 다이어리 최초 작성 시간
                 }   
             </Text>
@@ -105,7 +89,7 @@ const DiaryDetail = (props) => {
                  <Image source = {diary.emoji} style = {styles.emoji} /> 
             </View>
            
-            <Text style = {styles.title}>{diary.title}</Text>
+            <Text style = {[styles.title, {color:diary.color}]}>{diary.title}</Text>
             <Text style = {styles.content}>{diary.content}</Text>
         </View>
        

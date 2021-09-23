@@ -1,25 +1,23 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, Text, ScrollView, TouchableWithoutFeedback, Keyboard, FlatList, TouchableOpacity } from 'react-native';
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { FlatList, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import React, { useEffect, useState } from 'react';
 
-import ShowDiary from '../../components/ShowDiary';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import DiaryInputModal from '../../components/DiaryInputModal';
+import Icon from 'react-native-vector-icons/FontAwesome';
 import NotFound from '../../components/NotFound';
 import SearchBar from '../../components/SearchBar';
+import ShowDiary from '../../components/ShowDiary';
 import { useDiaryList } from '../../contexts/DiaryProvider';
 
-
-
-const reverseData = data => {
-    return data.sort((a, b) => {
-        const aInt = parseInt(a.time);
-        const bInt = parseInt(b.time);
-        if (aInt < bInt) return 1;
-        if (aInt == bInt) return 0;
-        if (aInt > bInt) return -1;
-    });
-};
+// const reverseData = data => {
+//     return data.sort((a, b) => {
+//         const aInt = parseInt(a.time);
+//         const bInt = parseInt(b.time);
+//         if (aInt < bInt) return 1;
+//         if (aInt == bInt) return 0;
+//         if (aInt > bInt) return -1;
+//     });
+// };
 
 const DiaryScreen = ({ navigation }) => {
     useEffect(() => {
@@ -44,15 +42,16 @@ const DiaryScreen = ({ navigation }) => {
     const [searchQuery, setSearchQuery] = useState('');
     const [resultNotFound, setResultNotFound] = useState(false);
 
-    const { diaryList, setDiaryList, findDiaryList } = useDiaryList();
+    const { diaryList, setDiaryList, addDiary } = useDiaryList();
 
-    const reverseDiaryList = reverseData(diaryList);
 
-    const handleOnSubmit = async (emoji, title, content) => {
-        const diary = { id: Date.now(), emoji, title, content, time: Date.now() };
-        const updatedDiaryList = [...diaryList, diary];
-        setDiaryList(updatedDiaryList);
-        await AsyncStorage.setItem('diaryList', JSON.stringify(updatedDiaryList));
+    const handleOnSubmit = async (data) => {
+        const diary = { 
+            id: Date.now(), 
+            time: Date.now(),
+            ...data
+         };
+        addDiary(diary)
     };
 
     const openDiary = (diary) => {
@@ -121,7 +120,7 @@ const DiaryScreen = ({ navigation }) => {
                 <NotFound />
             ) : (
                 <FlatList
-                    data = {reverseDiaryList}
+                    data = {diaryList}
                     numColumns = {1}
                     keyExtractor = {item => item.id.toString()}
                     renderItem = {({ item }) => (

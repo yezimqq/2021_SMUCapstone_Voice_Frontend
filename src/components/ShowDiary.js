@@ -1,16 +1,16 @@
-import React from 'react';
-import { TouchableOpacity, StyleSheet, Text, View, Image } from 'react-native';
+import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
+import React from 'react';
 
 /* ----- onPress diary => show detail, can edit/delete ----- */
 const ShowDiary = ({ item, onPress }) => {
-    const { emoji, title, content } = item;
+    const { emoji, title, content , color} = item;
     return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
         <View style = {styles.rowContainer}>
                 <Image source = {emoji}  style = {styles.emoji}/>
             <View style = {styles.columnContainer}>
-                <Text style={styles.title} > {title} </Text>
+                <Text style={[styles.title, {color}]} > {title} </Text>
                 <Text> {content} </Text>
             </View>
         </View>

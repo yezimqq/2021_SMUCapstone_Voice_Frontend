@@ -1,19 +1,25 @@
+import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Dimensions } from 'react-native';
-import { images } from '../images';
-import { VictoryPie, VictoryLabel } from 'victory-native';
+import { VictoryLabel, VictoryPie } from 'victory-native';
 
-const dataEx = [
-    {x: 'very good', y: 2},
-    {x: 'good', y: 4},
-    {x: 'normal', y: 6},
-    {x: 'bad', y: 6},
-    {x: 'very bad', y: 4},
-]
+import { images } from '../images';
+import { useDiaryList } from '../contexts/DiaryProvider';
 
 const Home = ({ navigation }) => {
-    const [data, setData] = useState(dataEx);
-    const [emoji, setEmoji] = useState();
+    const { diaryList } = useDiaryList()
+    const nowDiary = diaryList.length > 0 ? diaryList[0] : null
+    
+
+    const monthlyData = diaryList.filter(v => v.time > Date.now() - 2629800000 /* 1개월 밀리초로 */)
+
+    const data = [
+        {x: '매우 좋음', y: monthlyData.filter(v => v.category === '매우 좋음').length },
+        {x: '좋음', y: monthlyData.filter(v => v.category === '좋음').length},
+        {x: '보통', y: monthlyData.filter(v => v.category === '보통').length},
+        {x: '나쁨', y: monthlyData.filter(v => v.category === '나쁨').length},
+        {x: '매우 나쁨', y: monthlyData.filter(v => v.category === '매우 나쁨').length},
+    ]
+    
 
     const DefaultEmoji = ({source, text}) => {
         return (
@@ -31,8 +37,8 @@ const Home = ({ navigation }) => {
                 onPress = {() => navigation.navigate('DiaryScreen')}
             >
                 <Text style={styles.text}>현재 나의 감정</Text>
-                <Text style={[styles.text, {color: '#64a1d0'}]}>보통</Text>
-                <Image source={images.normal} style={styles.emoji}/>
+                <Text style={[styles.text, {color: nowDiary?.color || '#64a1d0'}]}>{nowDiary?.emojiName || '없음'}</Text>
+                <Image source={nowDiary?.emoji || images.normal} style={styles.emoji}/>
             </TouchableOpacity>
             
             {/* 위치 절대값으로 맞춘거라 기기에 따라 맞춤 설정 해야함 */}
@@ -48,7 +54,7 @@ const Home = ({ navigation }) => {
                         endAngle={90}
                         innerRadius={100}
                         colorScale={['#54b492', '#8dbe41', '#64a1d0', '#e8913c', '#dc3439']}
-                        labels={({ datum }) => datum.y}
+                        labels={({ datum }) => datum.y || ''}
                         labelComponent={<VictoryLabel dy={15} style={{fontWeight: 'bold'}} />}
                     />
                 </View>

@@ -1,12 +1,15 @@
+import { Image, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Modal, TextInput, TouchableWithoutFeedback, Keyboard, Text, Image, TouchableOpacity } from 'react-native';
-import DiaryIconBtn from './DiaryIconBtn';
-import { images } from '../images';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 
+import DiaryIconBtn from './DiaryIconBtn';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import { images } from '../images';
 
 const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     const [emoji, setEmoji] = useState('');
+    const [emojiName, setEmojiName] = useState('')
+    const [category, setCategory] = useState('')
+    const [color, setColor] = useState('')
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
@@ -23,6 +26,9 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
             setEmoji(diary.emoji);
             setTitle(diary.title);
             setContent(diary.content);
+            setEmojiName(diary.emojiName);
+            setCategory(diary.category);
+            setColor(diary.color);
         }
     }, [isEdit]);
 
@@ -32,10 +38,10 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
             return onClose();
 
         if (isEdit) {
-            onSubmit(emoji, title, content, Date.now());
+            onSubmit({emoji, title, content, emojiName, category, color});
         } 
         else {
-            onSubmit(emoji, title, content);
+            onSubmit({emoji, title, content, emojiName, category, color});
             setEmoji('');
             setTitle('');
             setContent('');
@@ -48,8 +54,18 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
             setEmoji('');
             setTitle('');
             setContent('');
+            setEmojiName('');
+            setCategory('');
+            setColor('');
         }
         onClose();
+    };
+
+    const handleEmojiChange = (emoji, emojiName, category, color) => {
+        setEmoji(emoji);
+        setEmojiName(emojiName);
+        setCategory(category);
+        setColor(color);
     };
 
 
@@ -63,7 +79,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                 <View style = {styles.rowContainer}>
                     <View style = {styles.columnContainer}>
                         <TouchableOpacity  // 매우 좋음 
-                            onPress = {async() => {setEmoji(images.verygood)}}
+                            onPress = {async() => {handleEmojiChange(images.verygood, '매우 좋음', '매우 좋음', '#54b492')}}
                             style = {[styles.emojiBorder, emoji == images.verygood && {borderColor: '#54b492'}]}
                         >
                             <Image source = {images.verygood} style = {styles.emoji} />
@@ -71,7 +87,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.happy)}}
+                            onPress = {async() => {handleEmojiChange(images.happy, '행복해요', '매우 좋음', '#54b492')}}
                             style = {[styles.emojiBorder, emoji == images.happy && {borderColor: '#54b492'}]}
                         >
                             <Image source = {images.happy} style = {styles.emoji} />
@@ -79,7 +95,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.pleased)}}
+                            onPress = {async() => {handleEmojiChange(images.pleased, '기뻐요', '매우 좋음', '#54b492')}}
                             style = {[styles.emojiBorder, emoji == images.pleased && {borderColor: '#54b492'}]}
                         >
                             <Image source = {images.pleased} style = {styles.emoji} />
@@ -87,7 +103,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.fantastic)}}
+                            onPress = {async() => {handleEmojiChange(images.fantastic, '끝내줘요', '매우 좋음', '#54b492')}}
                             style = {[styles.emojiBorder, emoji == images.fantastic && {borderColor: '#54b492'}]}
                         >
                             <Image source = {images.fantastic} style = {styles.emoji} />
@@ -95,7 +111,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.great)}}
+                            onPress = {async() => {handleEmojiChange(images.great, '최고에요', '매우 좋음', '#54b492')}}
                             style = {[styles.emojiBorder, emoji == images.great && {borderColor: '#54b492'}]}
                         >
                             <Image source = {images.great} style = {styles.emoji} />
@@ -106,7 +122,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
                     <View style = {styles.columnContainer}>
                         <TouchableOpacity  // 좋음 
-                            onPress = {async() => {setEmoji(images.good)}}
+                            onPress = {async() => {handleEmojiChange(images.good, '좋음', '좋음', '#8dbe41')}}
                             style = {[styles.emojiBorder, emoji == images.good && {borderColor: '#8dbe41'}]}
                         >
                             <Image source = {images.good} style = {styles.emoji} />
@@ -114,7 +130,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.pound)}}
+                            onPress = {async() => {handleEmojiChange(images.pound, '설레요', '좋음', '#8dbe41')}}
                             style = {[styles.emojiBorder, emoji == images.pound && {borderColor: '#8dbe41'}]}
                         >
                             <Image source = {images.pound} style = {styles.emoji} />
@@ -122,7 +138,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.comfortable)}}
+                            onPress = {async() => {handleEmojiChange(images.comfortable, '편안해요', '좋음', '#8dbe41')}}
                             style = {[styles.emojiBorder, emoji == images.comfortable && {borderColor: '#8dbe41'}]}
                         >
                             <Image source = {images.comfortable} style = {styles.emoji} />
@@ -130,7 +146,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.fun)}}
+                            onPress = {async() => {handleEmojiChange(images.fun, '즐거워요', '좋음', '#8dbe41')}}
                             style = {[styles.emojiBorder, emoji == images.fun && {borderColor: '#8dbe41'}]}
                         >
                             <Image source = {images.fun} style = {styles.emoji} />
@@ -138,7 +154,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.excited)}}
+                            onPress = {async() => {handleEmojiChange(images.excited, '신나요', '좋음', '#8dbe41')}}
                             style = {[styles.emojiBorder, emoji == images.excited && {borderColor: '#8dbe41'}]}
                         >
                             <Image source = {images.excited} style = {styles.emoji} />
@@ -149,7 +165,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
                     <View style = {styles.columnContainer}>
                         <TouchableOpacity  // 보통
-                            onPress = {async() => {setEmoji(images.normal)}}
+                            onPress = {async() => {handleEmojiChange(images.normal, '보통', '보통', '#64a1d0')}}
                             style = {[styles.emojiBorder, emoji == images.normal && {borderColor: '#64a1d0'}]}
                         >
                             <Image source = {images.normal} style = {styles.emoji} />
@@ -157,7 +173,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.boring)}}
+                            onPress = {async() => {handleEmojiChange(images.boring, '심심해요', '보통', '#64a1d0')}}
                             style = {[styles.emojiBorder, emoji == images.boring && {borderColor: '#64a1d0'}]}
                         >
                             <Image source = {images.boring} style = {styles.emoji} />
@@ -165,7 +181,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.awkward)}}
+                            onPress = {async() => {handleEmojiChange(images.awkward, '당황스러워요', '보통', '#64a1d0')}}
                             style = {[styles.emojiBorder, emoji == images.awkward && {borderColor: '#64a1d0'}]}
                         >
                             <Image source = {images.awkward} style = {styles.emoji} />
@@ -173,7 +189,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.dontknow)}}
+                            onPress = {async() => {handleEmojiChange(images.dontknow, '모르겠어요', '보통', '#64a1d0')}}
                             style = {[styles.emojiBorder, emoji == images.dontknow && {borderColor: '#64a1d0'}]}
                         >
                             <Image source = {images.dontknow} style = {styles.emoji} />
@@ -181,7 +197,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.umm)}}
+                            onPress = {async() => {handleEmojiChange(images.umm, '묘해요', '보통', '#64a1d0')}}
                             style = {[styles.emojiBorder, emoji == images.umm && {borderColor: '#64a1d0'}]}
                         >
                             <Image source = {images.umm} style = {styles.emoji} />
@@ -192,7 +208,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
                     <View style = {styles.columnContainer}>
                         <TouchableOpacity  // 나쁨
-                            onPress = {async() => {setEmoji(images.bad)}}
+                            onPress = {async() => {handleEmojiChange(images.bad, '나쁨', '나쁨', '#e8913c')}}
                             style = {[styles.emojiBorder, emoji == images.bad && {borderColor: '#e8913c'}]}
                         >
                             <Image source = {images.bad} style = {styles.emoji} />
@@ -200,7 +216,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.frown)}}
+                            onPress = {async() => {handleEmojiChange(images.frown, '언짢아요', '나쁨', '#e8913c')}}
                             style = {[styles.emojiBorder, emoji == images.frown && {borderColor: '#e8913c'}]}
                         >
                             <Image source = {images.frown} style = {styles.emoji} />
@@ -208,7 +224,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.uncomfortable)}}
+                            onPress = {async() => {handleEmojiChange(images.uncomfortable, '불편해요', '나쁨', '#e8913c')}}
                             style = {[styles.emojiBorder, emoji == images.uncomfortable && {borderColor: '#e8913c'}]}
                         >
                             <Image source = {images.uncomfortable} style = {styles.emoji} />
@@ -216,7 +232,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.blue)}}
+                            onPress = {async() => {handleEmojiChange(images.blue, '우울해요', '나쁨', '#e8913c')}}
                             style = {[styles.emojiBorder, emoji == images.blue && {borderColor: '#e8913c'}]}
                         >
                             <Image source = {images.blue} style = {styles.emoji} />
@@ -224,7 +240,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.annoyed)}}
+                            onPress = {async() => {handleEmojiChange(images.annoyed, '짜증나요', '나쁨', '#e8913c')}}
                             style = {[styles.emojiBorder, emoji == images.annoyed && {borderColor: '#e8913c'}]}
                         >
                             <Image source = {images.annoyed} style = {styles.emoji} />
@@ -236,7 +252,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
                     <View style = {styles.columnContainer}>
                        <TouchableOpacity  // 매우 나쁨
-                            onPress = {async() => {setEmoji(images.verybad)}}
+                            onPress = {async() => {handleEmojiChange(images.verybad, '매우 나쁨', '매우 나쁨', '#dc3439')}}
                             style = {[styles.emojiBorder, emoji == images.verybad && {borderColor: '#dc3439'}]}
                         >
                             <Image source = {images.verybad} style = {styles.emoji} />
@@ -244,7 +260,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.terrible)}}
+                            onPress = {async() => {handleEmojiChange(images.terrible, '끔찍해요', '매우 나쁨', '#dc3439')}}
                             style = {[styles.emojiBorder, emoji == images.terrible && {borderColor: '#dc3439'}]}
                         >
                             <Image source = {images.terrible} style = {styles.emoji} />
@@ -252,7 +268,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.gross)}}
+                            onPress = {async() => {handleEmojiChange(images.gross, '역겨워요', '매우 나쁨', '#dc3439')}}
                             style = {[styles.emojiBorder, emoji == images.gross && {borderColor: '#dc3439'}]}
                         >
                             <Image source = {images.gross} style = {styles.emoji} />
@@ -260,7 +276,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.sad)}}
+                            onPress = {async() => {handleEmojiChange(images.sad, '슬퍼요', '매우 나쁨', '#dc3439')}}
                             style = {[styles.emojiBorder, emoji == images.sad && {borderColor: '#dc3439'}]}
                         >
                             <Image source = {images.sad} style = {styles.emoji} />
@@ -268,7 +284,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         </TouchableOpacity>
 
                         <TouchableOpacity 
-                            onPress = {async() => {setEmoji(images.angry)}}
+                            onPress = {async() => {handleEmojiChange(images.angry, '화나요', '매우 나쁨', '#dc3439')}}
                             style = {[styles.emojiBorder, emoji == images.angry && {borderColor: '#dc3439'}]}
                         >
                             <Image source = {images.angry} style = {styles.emoji} />
@@ -295,7 +311,8 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         placeholder='내용을 입력해주세요.'
                         placeholderTextColor = '#bebebe'
                         textAlignVertical ='top' 
-                        multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능 
+                        returnKeyType = 'done'
+                        //multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능 
                         style={{marginLeft: 10}}
                         onChangeText={text => setContent(text)}
                     />
@@ -329,22 +346,6 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
   );
 };
 
-/* 매우 좋음(1), 좋음(2), 보통(3), 나쁨(4), 매우 나쁨(5) 카테고리, 이모지이름  
-   => map() function 쓴다면 사용! but, border는 사용 불가          
-                <View style = {styles.columnContainer}>
-                    {category_1.map((emojiOption, i) => (
-                        <TouchableOpacity  onPress = {() => {setEmoji(emojiOption)}}>
-                            <Image
-                                key = {i}
-                                source = {emojiOption}
-                                style = {styles.emoji}
-                            />
-                        </TouchableOpacity>
-                    ))}
-                </View>   
-*/ 
-
-const category_1 = [ images.verygood, images.happy, images.pleased, images.fantastic, images.great ]; 
 const category_2 = [ images.good, images.pound, images.comfortable, images.fun, images.excited ];
 const category_3 = [ images.normal, images.boring, images.awkward, images.dontknow, images.umm ];
 const category_4 = [ images.bad, images.frown, images.uncomfortable, images.blue, images.annoyed ];
