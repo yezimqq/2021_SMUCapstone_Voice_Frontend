@@ -7,6 +7,9 @@ import { PieChart } from 'react-native-chart-kit';
 import dateFormat from 'dateformat';
 import { ButtonGroup } from 'react-native-elements';
 
+
+import { useDiaryList } from '../../contexts/DiaryProvider';
+
 /* ----- calendar korean 설정 ----- */
 LocaleConfig.locales['ko'] = {
     monthNames: ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'],
@@ -68,6 +71,8 @@ const DailyChart = ({ navigation }) => {
     const [currentDate, setCurrentDate] = useState(dateFormat(new Date(), 'isoDate'));
     const [selectedMoodIndex, setSelectedMoodIndex] = useState(0);  
     const [moodGraphData, setMoodGraphData] = useState([]);
+
+    const { diaryList } = useDiaryList();
 
     const dateMoodData = useRef({
         [currentDate]: { // today pie chart data

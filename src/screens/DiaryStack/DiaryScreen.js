@@ -1,7 +1,6 @@
 import { FlatList, Keyboard, ScrollView, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import DiaryInputModal from '../../components/DiaryInputModal';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import NotFound from '../../components/NotFound';
@@ -9,15 +8,7 @@ import SearchBar from '../../components/SearchBar';
 import ShowDiary from '../../components/ShowDiary';
 import { useDiaryList } from '../../contexts/DiaryProvider';
 
-// const reverseData = data => {
-//     return data.sort((a, b) => {
-//         const aInt = parseInt(a.time);
-//         const bInt = parseInt(b.time);
-//         if (aInt < bInt) return 1;
-//         if (aInt == bInt) return 0;
-//         if (aInt > bInt) return -1;
-//     });
-// };
+
 
 const DiaryScreen = ({ navigation }) => {
     useEffect(() => {
@@ -40,9 +31,15 @@ const DiaryScreen = ({ navigation }) => {
   
     const [modalVisible, setModalVisible] = useState(false);
     const [searchQuery, setSearchQuery] = useState('');
-    const [resultNotFound, setResultNotFound] = useState(false);
 
-    const { diaryList, setDiaryList, addDiary } = useDiaryList();
+    const { diaryList, addDiary } = useDiaryList();
+
+    const filteredDiaryList = diaryList.filter(diary => {
+        if (diary.content.toLowerCase().includes(searchQuery.toLowerCase())
+        ) {
+        return diary;
+        }
+    });
 
 
     const handleOnSubmit = async (data) => {
@@ -60,49 +57,16 @@ const DiaryScreen = ({ navigation }) => {
 
     const handleOnSearchInput = async text => {
         setSearchQuery(text);
-        if (!text.trim()) {
-            setSearchQuery('');
-            setResultNotFound(false);
-            return await findDiaryList();
-        }
-        const filteredDiaryList = diaryList.filter(diary => {
-            if (diary.title.toLowerCase().includes(text.toLowerCase())
-                || diary.content.toLowerCase().includes(text.toLowerCase())
-            ) {
-            return diary;
-            }
-        });
-
-        if (filteredDiaryList.length) {
-            setDiaryList([...filteredDiaryList]);
-        } 
-        else {
-            setResultNotFound(true);
-        }
     };
+    
 
     const handleOnClear = async () => {
         setSearchQuery('');
-        setResultNotFound(false);
-        await findDiaryList();
     };
 
     return (
 
     <>
-    {/*<CalendarStrip
-        scrollable
-        selectedDate={date}
-        style={{height:100, paddingTop: 10, paddingBottom: 5, marginTop: 10 }}
-        calendarColor={'white'}
-        calendarHeaderStyle={{color: 'black', fontSize: 15, marginBottom: 10 }}
-        dateNumberStyle={{color: 'black', fontSize: 20}}
-        dateNameStyle={{color: 'black', fontSize: 15}}
-        iconContainer={{flex: 0.1}}
-        highlightDateNumberStyle={{color: 'black', fontSize: 20}}
-        highlightDateNameStyle={{color: 'black', fontSize: 15}}
-        daySelectionAnimation={{ type: 'background', highlightColor: '#dedede' }}
-    />*/}
      
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
@@ -116,11 +80,11 @@ const DiaryScreen = ({ navigation }) => {
             ) : null}
             
             
-            {resultNotFound ? (
+            {diaryList.length && !filteredDiaryList.length ? (
                 <NotFound />
             ) : (
                 <FlatList
-                    data = {diaryList}
+                    data = {filteredDiaryList}
                     numColumns = {1}
                     keyExtractor = {item => item.id.toString()}
                     renderItem = {({ item }) => (

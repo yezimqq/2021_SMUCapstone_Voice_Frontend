@@ -1,12 +1,12 @@
 import { Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import React, { useState } from 'react';
+import React from 'react';
 import { VictoryLabel, VictoryPie } from 'victory-native';
 
 import { images } from '../images';
 import { useDiaryList } from '../contexts/DiaryProvider';
 
 const Home = ({ navigation }) => {
-    const { diaryList } = useDiaryList()
+    const { diaryList } = useDiaryList(); 
     const nowDiary = diaryList.length > 0 ? diaryList[0] : null
     
 

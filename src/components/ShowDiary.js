@@ -4,13 +4,13 @@ import React from 'react';
 
 /* ----- onPress diary => show detail, can edit/delete ----- */
 const ShowDiary = ({ item, onPress }) => {
-    const { emoji, title, content , color} = item;
+    const { emoji, emojiName, content , color} = item;
     return (
     <TouchableOpacity onPress={onPress} style={styles.container}>
         <View style = {styles.rowContainer}>
                 <Image source = {emoji}  style = {styles.emoji}/>
             <View style = {styles.columnContainer}>
-                <Text style={[styles.title, {color}]} > {title} </Text>
+                <Text style={[styles.emojiName, {color}]} > {emojiName} </Text>
                 <Text> {content} </Text>
             </View>
         </View>
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         borderWidth: 1,
         borderColor: '#bebebe',
-        marginTop: 5
+        marginTop: 5,
     },
 
     rowContainer: {
@@ -48,9 +48,9 @@ const styles = StyleSheet.create({
         marginHorizontal: 20
     },
    
-    title: {
+    emojiName: {
         fontWeight: 'bold',
-        fontSize: 16,
+        fontSize: 20,
         color: '#ed847a',
         marginBottom: 10
     },

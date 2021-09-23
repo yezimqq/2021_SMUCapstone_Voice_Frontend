@@ -10,7 +10,6 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     const [emojiName, setEmojiName] = useState('')
     const [category, setCategory] = useState('')
     const [color, setColor] = useState('')
-    const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
 
     const display = emoji == ''? true: false;
@@ -24,7 +23,6 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     useEffect(() => {
         if (isEdit) {
             setEmoji(diary.emoji);
-            setTitle(diary.title);
             setContent(diary.content);
             setEmojiName(diary.emojiName);
             setCategory(diary.category);
@@ -34,16 +32,15 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
 
 
     const handleSubmit = () => {
-        if (!title.trim() && !content.trim())  // 아무것도 입력 안했을 시 체크버튼 = modal 닫기
+        if (!content.trim())  // 아무것도 입력 안했을 시 체크버튼 = modal 닫기
             return onClose();
 
         if (isEdit) {
-            onSubmit({emoji, title, content, emojiName, category, color});
+            onSubmit({emoji, content, emojiName, category, color});
         } 
         else {
-            onSubmit({emoji, title, content, emojiName, category, color});
+            onSubmit({emoji, content, emojiName, category, color});
             setEmoji('');
-            setTitle('');
             setContent('');
         }
         onClose();
@@ -52,7 +49,6 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
     const closeModal = () => {
         if (!isEdit) {
             setEmoji('');
-            setTitle('');
             setContent('');
             setEmojiName('');
             setCategory('');
@@ -294,17 +290,6 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                 </View>
             
 
-                <View style={[styles.inputTitle]}>
-                    <TextInput
-                        value={title}
-                        onChangeText={text => setTitle(text)}
-                        placeholder='제목을 입력해주세요.'
-                        placeholderTextColor = '#bebebe'
-                        returnKeyType = 'next'
-                        style={{marginLeft: 10}}
-                    />
-                </View>
-
                 <View style={[styles.inputContent]}>
                     <TextInput
                         value={content}
@@ -313,7 +298,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         textAlignVertical ='top' 
                         returnKeyType = 'done'
                         //multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능 
-                        style={{marginLeft: 10}}
+                        style={styles.contentText}
                         onChangeText={text => setContent(text)}
                     />
                 </View>
@@ -325,7 +310,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         onPress = {handleSubmit}
                     />
 
-                {title.trim() || content.trim() ? (
+                {content.trim() ? (
                     <DiaryIconBtn
                         size = {15}
                         style = {{ marginLeft: 15 }}
@@ -416,19 +401,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
 
-    inputTitle: {
-        width: '90%',
-        borderWidth: 1,
-        borderColor:'#cccccc',
-        borderRadius: 4,
-        fontSize: 16,
-        height: 40,
-        marginTop: 20,
-        marginBottom: 10,
-        fontWeight: 'bold',
-        justifyContent: 'center'
-    },
-
     inputContent: {
         width: '90%',
         height: 150,
@@ -436,6 +408,13 @@ const styles = StyleSheet.create({
         borderColor:'#cccccc',
         borderRadius: 4,
         fontSize: 16,  
+    },
+
+    contentText: {
+        marginLeft: 20, 
+        marginTop: 20,
+        fontSize: 16
+
     },
   
     modalBG: {

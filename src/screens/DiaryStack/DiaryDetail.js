@@ -87,9 +87,8 @@ const DiaryDetail = (props) => {
 
             <View style = {{alignItems: 'center'}}>
                  <Image source = {diary.emoji} style = {styles.emoji} /> 
+                 <Text style = {[styles.emojiName, {color:diary.color}]}>{diary.emojiName}</Text>
             </View>
-           
-            <Text style = {[styles.title, {color:diary.color}]}>{diary.title}</Text>
             <Text style = {styles.content}>{diary.content}</Text>
         </View>
        
@@ -134,10 +133,10 @@ const styles = StyleSheet.create({
     emoji: {
         width: 100,
         height: 100, 
-        marginBottom: 30
+        marginBottom: 5
     },
 
-    title: {
+    emojiName: {
         fontSize: 30,
         color: '#ea847a',
         fontWeight: 'bold',
