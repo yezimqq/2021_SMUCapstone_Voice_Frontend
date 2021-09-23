@@ -33,6 +33,8 @@ import EarIcon from '../assets/custom/ear.png';
 import WaveIcon from '../assets/custom/wave.png';
 import RecordingIcon from '../assets/custom/recording.png';
 
+import logo from '../assets/custom/logo.png';
+
 
 export const images = {
     verygood: VerygoodIcon,
@@ -68,5 +70,6 @@ export const images = {
     ear: EarIcon,
     wave: WaveIcon,
     recording: RecordingIcon,
+    logo: logo
 
 };

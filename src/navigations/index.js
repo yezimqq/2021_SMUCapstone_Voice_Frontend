@@ -10,7 +10,7 @@ const Navigation = () => {
 
     return (
         <NavigationContainer>
-            {!user?.LoginId && !user?.password ? <Main /> : <Auth />}
+            {user?.LoginId && user?.password ? <Main /> : <Auth />}
             {/*<Auth />*/}
             {/*<Main />*/} 
         </NavigationContainer>

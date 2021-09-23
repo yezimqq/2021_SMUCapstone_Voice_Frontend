@@ -1,7 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, Text, View, TextInput, TouchableOpacity, Alert, Image} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { UserContext } from '../contexts';
+import { images } from '../images';
+
 
 const Login = ({ navigation }) => {
     const [id, setId] = useState('');
@@ -43,7 +45,7 @@ const Login = ({ navigation }) => {
 
     return (
         <View style = {styles.container}>
-            <Text style = {styles.logo}>Psycology{'\n'}Consult</Text>
+            <Image source = {images.logo} style = {styles.logo} />
             <View style = {styles.inputView} >
                 <TextInput
                     style = {styles.inputText}
@@ -91,10 +93,9 @@ const styles = StyleSheet.create({
     },
 
     logo: {
-        fontWeight: '800',
-        fontSize: 50,
-        color: "black",
-        marginBottom: 40,
+        width: 350,
+        height: 100,
+        marginBottom: 40
     },
 
     inputView: {

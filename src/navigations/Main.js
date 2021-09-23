@@ -290,7 +290,7 @@ const Main = () => {
                 
             />
             <Tab.Screen 
-                name = "심리상담" 
+                name = "대화하기" 
                 component = {VoiceChatStack}
                 options = {({route}) => ({
                     tabBarVisible: getTabBarVisibility(route),
