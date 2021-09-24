@@ -36,7 +36,7 @@ const chartConfig = {
     backgroundGradientFromOpacity: 0,
     backgroundGradientTo: "#08130D",
     backgroundGradientToOpacity: 0.5,
-    color: (opacity = 1) => `rgba(26, 255, 146, ${opacity})`,
+    color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
     strokeWidth: 2, // optional, default 3
     barPercentage: 0.5,
     useShadowColorFromDataset: false // optional
@@ -73,14 +73,16 @@ const DailyChart = ({ navigation }) => {
     const [moodGraphData, setMoodGraphData] = useState([]);
 
     const { diaryList } = useDiaryList();
+     
+    const TodayData = diaryList.filter(v => v.time > Date.now() - 86400000 );
 
     const dateMoodData = useRef({
         [currentDate]: { // today pie chart data
-            verygood: null, 
-			good: null,
-			normal: null,
-            bad: null,
-			verybad: null
+            verygood: TodayData.filter(v => v.category === '매우 좋음').length, 
+			good: TodayData.filter(v => v.category === '좋음').length,
+			normal: TodayData.filter(v => v.category === '보통').length,
+            bad: TodayData.filter(v => v.category === '나쁨').length,
+			verybad: TodayData.filter(v => v.category === '매우 나쁨').length
             
 		}
     });
@@ -176,7 +178,7 @@ const DailyChart = ({ navigation }) => {
 										chartConfig = {chartConfig}
 										hasLegend = {false}
 										accessor = 'value'
-										backgroundColor = 'transparent'  // 투명하게 설정
+										//backgroundColor = 'transparent'  // 투명하게 설정
 									/>
 								</View>
 								<View style = {{

@@ -1,11 +1,18 @@
 import { Image, Keyboard, Modal, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import React, { useEffect, useState } from 'react';
 
-import DiaryIconBtn from './DiaryIconBtn';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import { images } from '../images';
+import DiaryIconBtn from './DiaryIconBtn';
+import DateChanger from './DateChanger';
+
+const resetTimestampHours = (timestamp) => {
+    var newDate = new Date(+timestamp)
+    return newDate.setHours(0,0,0,0);
+}
 
 const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
+    const [currentDate, setCurrentDate] = useState(new Date(resetTimestampHours(Date.now())));
     const [emoji, setEmoji] = useState('');
     const [emojiName, setEmojiName] = useState('')
     const [category, setCategory] = useState('')
@@ -71,6 +78,11 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
        <KeyboardAwareScrollView> 
             <View style={styles.container}>
                 <Text style = {styles.headerText}> 지금 나의 기분은 </Text>
+                <DateChanger
+                    date = {currentDate}
+                    mode = {"date"}
+                    onDateChange = {(d) => {setCurrentDate(d);}}
+                />
                 {/* ----- border 지정 때문에 하나하나 설정  ----- */}
                 <View style = {styles.rowContainer}>
                     <View style = {styles.columnContainer}>
