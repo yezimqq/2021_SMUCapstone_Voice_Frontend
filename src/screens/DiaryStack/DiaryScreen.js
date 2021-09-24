@@ -35,7 +35,8 @@ const DiaryScreen = ({ navigation }) => {
     const { diaryList, addDiary } = useDiaryList();
 
     const filteredDiaryList = diaryList.filter(diary => {
-        if (diary.content.toLowerCase().includes(searchQuery.toLowerCase())
+        if (diary.emojiName.toLowerCase().includes(searchQuery.toLowerCase())
+           || diary.content.toLowerCase().includes(searchQuery.toLowerCase())
         ) {
         return diary;
         }

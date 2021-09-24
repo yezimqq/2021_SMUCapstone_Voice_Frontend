@@ -319,7 +319,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                     <DiaryIconBtn
                         size = {15}
                         antIconName = 'check'
-                        onPress = {handleSubmit}
+                        onPress = {() => {handleSubmit()}}
                     />
 
                 {content.trim() ? (

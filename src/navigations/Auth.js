@@ -24,7 +24,7 @@ const Auth = () => {
                 name = "Signup" 
                 component = {Signup} 
                 options = {{
-                    headerTitle: "Psycology Consult",
+                    headerTitle: "",
                     headerTitleAlign: 'center',
                     headerBackTitleVisible: false,
                     headerTintColor: 'white',

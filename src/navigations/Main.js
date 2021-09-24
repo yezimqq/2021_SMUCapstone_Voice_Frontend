@@ -20,7 +20,7 @@ const HomeStack = () => {
                 name = "Home" 
                 component = {Home} 
                 options = {{
-                    headerTitle: "Psycology Consult",
+                    headerTitle: "",
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                     headerStyle: {
@@ -74,7 +74,7 @@ const VoiceChatStack  = () => {
                 name = "ChatList" 
                 component = {ChatList}
                 options = {{
-                    headerTitle: "심리상담채팅",
+                    headerTitle: "대화하기",
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                     headerStyle: {
