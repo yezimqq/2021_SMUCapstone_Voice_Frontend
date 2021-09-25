@@ -1,16 +1,19 @@
 import React, { useState, useEffect, useCallback, useLayoutEffect } from 'react';
-import { View, TouchableOpacity, StyleSheet, Text } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Text, Alert } from 'react-native';
 import { Bubble, GiftedChat, Send, Composer } from 'react-native-gifted-chat';
 import Feather from 'react-native-vector-icons/Feather';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { Audio } from 'expo-av';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Chat = ({ navigation, route: { params } }) => {
     const [messages, setMessages] = useState([]);
     const [recording, setRecording] = useState();
     
     useEffect(() => {
+        console.log('-----------새로운 시작-----------')
+
         navigation.setOptions({
             headerRight: () => (
                 <View style={styles.rowContainer}>
@@ -35,6 +38,57 @@ const Chat = ({ navigation, route: { params } }) => {
                 </View>
             ),
         });
+
+        setMessages([
+            {
+              _id: 1,
+              text: '무슨 일이니?',
+              createdAt: new Date(),
+              user: {
+                _id: 2,
+                name: params.name,
+                avatar: params.image,
+              },
+            },
+            {
+                _id: 2,
+                text: '안녕하세요',
+                createdAt: new Date(),
+                user: {
+                  _id: 1,
+                },
+          },
+        ]);
+
+        /*
+        //GET - chatBot Id로 대화 내용 조회 API 연결
+        async function getMsgByChatBotId() {
+
+            const response = await fetch("http://13.124.78.167:8080/chat", {
+                method: "GET",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    chatBotId: 0,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+                
+            const res = await response.json();
+            return res;
+        };
+
+        getMsgByChatBotId().then(async res => {
+            console.log("res: ", res);
+        });
+        */
+
     }, []);
 
     useLayoutEffect(() => {
@@ -42,28 +96,94 @@ const Chat = ({ navigation, route: { params } }) => {
     }, []);
 
     const onSend = useCallback((messages = []) => {
-        setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
+        const dateY = new Date();
+        console.log(`메시지 \n`, messages[0].text);
+        setMessages(previousMessages => GiftedChat.append(previousMessages, messages));
+
+        //PUT - 메시지 생성 API 연결
+        async function putMessages() {
+            const response = await fetch("http://13.124.78.167:8080/chat", {
+                method: "PUT",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    botId: 2,
+                    createDate: new Date(dateY.getFullYear(), dateY.getMonth()+1, dateY.getDate(), dateY.getHours(), dateY.getMinutes(), dateY.getSeconds()),
+                    isBot: 0,
+                    text: messages[0].text,
+                }),
+            });
+        
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+                    
+            const res = await response.json();
+            return res;
+            
+        };
+        
+        putMessages().then(async res => {
+            console.log("res: ", res);
+        });
     }, []);
+
+    const SendButton = props => {
+        return (
+            <Send
+                {...props}
+                containerStyle={{
+                    width: 44,
+                    height: 44,
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    marginHorizontal: 4,
+                }}
+            >
+                <MaterialCommunityIcons
+                    name="send-circle"
+                    style={styles.textInputIcon}
+                    size={32}
+                    color="#2e64e5"
+                />
+            </Send>
+        );
+    };
 
     const renderBubble = (props) => {
         return (
-            <Bubble
-                {...props}
-                wrapperStyle={{
-                    left: {
-                        backgroundColor: 'white',
-                    },
-                    right: {
-                        backgroundColor: '#2e64e5',
-                    }
-                }}
-                textStyle={{
-                    right: {
-                        color: '#fff',
-                    }
-                }}
-            />
+            <View>
+                <Bubble
+                    {...props}
+                    wrapperStyle={{
+                        left: {
+                            backgroundColor: 'white',
+                        },
+                        right: {
+                            backgroundColor: '#2e64e5',
+                        }
+                    }}
+                    textStyle={{
+                        right: {
+                            color: '#fff',
+                        }
+                    }}
+                />
+                <View style={styles.container}>
+                    <TouchableOpacity onPress={_handleSpeakerIcon}>
+                        <FontAwesome name="volume-down" size={20}/>
+                    </TouchableOpacity>
+                </View>
+            </View>
         );
+    };
+
+    const _handleSpeakerIcon = () => {
+        const text = messages[0].text;
+        alert(text);
     };
 
     const renderComposer = (props) => {
@@ -133,66 +253,46 @@ const Chat = ({ navigation, route: { params } }) => {
         console.log('Recording stopped and stored at', uri);
     }
 
-    //GET - chatBot Id로 대화 내용 조회 API 연결
-    const _handleGetMsgByChatBotId  = (chatbotId) => {
-        async function getMsgByChatBotId() {
-            const response = await fetch("http://13.124.78.167:8080/chat", {
-                method: "GET",
-                headers: { 
-                    "Authorization" : await AsyncStorage.getItem('Authorization'),
-                    "Content-Type" : "application/json",
-                },
-                body: JSON.stringify({
-                    chatBotId: chatbotId,
-                })
-            });
+    return (
+        <GiftedChat
+            messages={messages}
+            onSend={onSend}
+            user={{
+                _id: 1,
+            }}
+            renderBubble={renderBubble}
+            alwaysShowSend
+            scrollToBottom
+            showAvatarForEveryMessage
+            renderComposer={renderComposer}
+        />
+    );
+};
 
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-            }
-            
-            const res = await response.json();
-            return res;
-        };
 
-        getMsgByChatBotId().then(async res => {
-            console.log("res: ", res);
-        });
-    };
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
 
-    //PUT - 메시지 생성 API 연결
-    const _handlePutMessages = (chatbotId) => {
-        async function putMessages() {
-            const response = await fetch("http://13.124.78.167:8080/chat", {
-                method: "PUT",
-                headers: { 
-                    "Authorization" : await AsyncStorage.getItem('Authorization'),
-                    "Content-Type" : "application/json",
+    rowContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
 
-                },
-                body: JSON.stringify({
-                    botId: chatbotId,
-                    createDate: new Date(),
-                    id: 2,
-                    isBot: 1,
-                    text: messages,
-                }),
-            });
+    headerIcon: {
+        margin: 5,
+    },
 
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-            }
-            
-            const res = await response.json();
-            return res;
-        };
+    textInputIcon: {
+        margin: 5,
+    }
 
-        putMessages().then(async res => {
-            console.log("res: ", res);
-        });
-    };
+});
+
+export default Chat;
 
     //GET - 유저의 챗봇 조회 API 연결
     const _handleGetChatBot = () => {
@@ -299,43 +399,3 @@ const Chat = ({ navigation, route: { params } }) => {
             console.log("res: ", res);
         });
     };
-
-    return (
-        <GiftedChat
-            messages={messages}
-            onSend={(messages) => onSend(messages)}
-            user={{
-                _id: 1,
-            }}
-            renderBubble={renderBubble}
-            alwaysShowSend
-            scrollToBottom
-            renderComposer={renderComposer}
-        />
-    );
-};
-
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-
-    rowContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-    },
-
-    headerIcon: {
-        margin: 5,
-    },
-
-    textInputIcon: {
-        margin: 5,
-    }
-
-});
-
-export default Chat;
