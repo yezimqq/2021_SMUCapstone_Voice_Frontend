@@ -103,7 +103,7 @@ const Chat = ({ navigation, route: { params } }) => {
         //PUT - 메시지 생성 API 연결
         async function putMessages() {
             const response = await fetch("http://13.124.78.167:8080/chat", {
-                method: "PUT",
+                method: "POST",
                 headers: { 
                     "Authorization" : await AsyncStorage.getItem('Authorization'),
                     "Content-Type" : "application/json",
