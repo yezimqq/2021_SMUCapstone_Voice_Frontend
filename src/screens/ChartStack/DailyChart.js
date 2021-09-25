@@ -74,15 +74,15 @@ const DailyChart = ({ navigation }) => {
 
     const { diaryList } = useDiaryList();
      
-    const TodayData = diaryList.filter(v => v.time > Date.now() - 86400000 );
+    
 
     const dateMoodData = useRef({
         [currentDate]: { // today pie chart data
-            verygood: TodayData.filter(v => v.category === '매우 좋음').length, 
-			good: TodayData.filter(v => v.category === '좋음').length,
-			normal: TodayData.filter(v => v.category === '보통').length,
-            bad: TodayData.filter(v => v.category === '나쁨').length,
-			verybad: TodayData.filter(v => v.category === '매우 나쁨').length
+            verygood: null, 
+			good: null,
+			normal: null,
+            bad: null,
+			verybad: null
             
 		}
     });
