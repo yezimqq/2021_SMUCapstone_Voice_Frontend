@@ -110,7 +110,7 @@ const ChatList = ({ navigation, route }) => {
                 keyExtractor={item=>item.id}
                 renderItem={({item}) => (
                     <TouchableOpacity 
-                        onPress={() => navigation.navigate('Chat', {name: item.name})} 
+                        onPress={() => navigation.navigate('Chat', {name: item.name, image: item.image})} 
                         style={styles.chatRoom}>
                         <View style={styles.rowContainer}>
                             <Image source={{ uri: item.image }} style={styles.image} />
