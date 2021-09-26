@@ -11,7 +11,7 @@ const ShowDiary = ({ item, onPress }) => {
                 <Image source = {emoji}  style = {styles.emoji}/>
             <View style = {styles.columnContainer}>
                 <Text style={[styles.emojiName, {color}]} > {emojiName} </Text>
-                <Text> {content} </Text>
+                <Text style = {styles.content} numberOfLines = {1}> {content} </Text>
             </View>
         </View>
     </TouchableOpacity>
@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     emoji: {
         width: 80,
         height: 80,
-        marginHorizontal: 20
+        marginHorizontal: 20,   
     },
    
     emojiName: {
@@ -54,6 +54,10 @@ const styles = StyleSheet.create({
         color: '#ed847a',
         marginBottom: 10
     },
+
+    content:{
+        marginRight: 125
+    }
 });
 
 export default ShowDiary;

@@ -46,7 +46,7 @@ const Home = ({ navigation }) => {
                 style ={styles.box_02}
                 onPress = {() => navigation.navigate('DailyChart')}
             >    
-                <Text style={[styles.text, styles.textPosition]}>이번 달 나의 감정기록</Text>
+                <Text style={[styles.text, styles.textPosition]}>나의 감정기록</Text>
                 <View style={styles.chartPosition}>
                     <VictoryPie 
                         data={data}

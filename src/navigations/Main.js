@@ -20,7 +20,7 @@ const HomeStack = () => {
                 name = "Home" 
                 component = {Home} 
                 options = {{
-                    headerTitle: "",
+                    headerTitle: "Home",
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                     headerStyle: {
@@ -49,7 +49,7 @@ const HomeStack = () => {
                 name = "DailyChart" 
                 component = {DailyChart}
                 options = {{
-                    headerTitle: "일별감정통계",
+                    headerTitle: "감정통계",
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                     headerStyle: {
@@ -134,6 +134,9 @@ const VoiceChatStack  = () => {
                         backgroundColor: '#ed847a',
                     },
                     headerBackTitleVisible: false,
+                    headerLeft: () => {
+                        return null;
+                    },
                 }}
             />     
         </Stack.Navigator>
@@ -145,49 +148,6 @@ const DiaryStack  = () => {
         <Stack.Navigator
             initialRouteName = 'DiaryScreen'
         >
-           {/*} <Stack.Screen
-                name = "Diary" 
-                component = {Diary}
-                options = {{
-                    headerTitle: "감정일기",
-                    headerTintColor: 'white',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#ed847a',
-                    },
-                    
-                }}
-            /> 
-
-            <Stack.Screen
-                name = "DiarySetting" 
-                component = {DiarySetting}
-                options = {{
-                    headerTitle: "감정일기설정",
-                    headerTintColor: 'white',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#ed847a',
-                    },
-                    headerBackTitleVisible: false,
-                }}
-            />    
-
-            <Stack.Screen
-                name = "DiaryWrite" 
-                component = {DiaryWrite}
-                options = {{
-                    headerTitle: "감정일기작성",
-                    headerTintColor: 'white',
-                    headerTitleAlign: 'center',
-                    headerStyle: {
-                        backgroundColor: '#ed847a',
-                    },
-                    headerBackTitleVisible: false,
-                }}
-            />     */}
-
-
             <Stack.Screen
                 name = "DiaryScreen" 
                 component = {DiaryScreen}
@@ -224,11 +184,12 @@ const ChartStack = () => {
         <Stack.Navigator
             initialRouteName = 'DailyChart'
         >
+            
             <Stack.Screen
                 name = "DailyChart" 
                 component = {DailyChart}
                 options = {{
-                    headerTitle: "일별감정통계",
+                    headerTitle: "감정통계",
                     headerTintColor: 'white',
                     headerTitleAlign: 'center',
                     headerStyle: {

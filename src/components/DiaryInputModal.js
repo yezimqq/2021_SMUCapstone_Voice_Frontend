@@ -309,7 +309,7 @@ const DiaryInputModal = ({ visible, onClose, onSubmit, diary, isEdit }) => {
                         placeholderTextColor = '#bebebe'
                         textAlignVertical ='top' 
                         returnKeyType = 'done'
-                        //multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능 
+                        multiline={true} // 일기 내용작성 시 return button 줄바꿈 가능 
                         style={styles.contentText}
                         onChangeText={text => setContent(text)}
                     />
@@ -423,10 +423,9 @@ const styles = StyleSheet.create({
     },
 
     contentText: {
-        marginLeft: 20, 
+        marginHorizontal: 20, 
         marginTop: 20,
-        fontSize: 16
-
+        fontSize: 16,
     },
   
     modalBG: {

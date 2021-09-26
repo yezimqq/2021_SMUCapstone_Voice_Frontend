@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
     content: {
         fontSize: 20,
         opacity: 0.6,
-        marginLeft: 30
+        marginHorizontal: 30
     },
   
     btnContainer: {

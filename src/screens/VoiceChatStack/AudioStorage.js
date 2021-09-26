@@ -8,7 +8,7 @@ import { documentDirectory, readDirectoryAsync as fsReadDirectoryAsync, deleteAs
 import * as DocumentPicker from 'expo-document-picker';
 
 const AudioStorage = ({ navigation }) => {
-    /* make directory in app */
+    /* make directory in app 
     useEffect(() => {
         navigation.setOptions({
             headerRight: () => (
@@ -24,7 +24,7 @@ const AudioStorage = ({ navigation }) => {
                 </TouchableOpacity>
             ),
         });
-    });
+    }); */
 
     const [isLoading, setLoading] = useState(true);
     const [recordingList, setRecordingList] = useState([]);

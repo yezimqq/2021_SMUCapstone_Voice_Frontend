@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { ScrollView, Text, View, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/Ionicons';
-import { VictoryBar, VictoryChart, VictoryLegend, VictoryLine, VictoryPie, VictoryStack } from 'victory-native';
+import { VictoryChart, VictoryLegend, VictoryLine, VictoryPie } from 'victory-native';
 import { Calendar, LocaleConfig } from 'react-native-calendars';
 import { PieChart } from 'react-native-chart-kit';
 import dateFormat from 'dateformat';
@@ -50,8 +50,7 @@ Date.prototype.addDays = function(days) {
 
 const DailyChart = ({ navigation }) => {
 
-    /* ----- hearder icon ----- */
-    useEffect(() => {
+    /* ----- hearder icon ----- 
         navigation.setOptions({
             headerRight: () => (
                 <TouchableOpacity
@@ -65,7 +64,7 @@ const DailyChart = ({ navigation }) => {
                 </TouchableOpacity>
             ),
         });
-    });
+    }); */
 
     const [currentMoodData, setCurrentMoodData] = useState(defaultChartData);
     const [currentDate, setCurrentDate] = useState(dateFormat(new Date(), 'isoDate'));
@@ -73,16 +72,15 @@ const DailyChart = ({ navigation }) => {
     const [moodGraphData, setMoodGraphData] = useState([]);
 
     const { diaryList } = useDiaryList();
-     
-    
+    const todayData = diaryList.filter(v => v.time > Date.now() - 86400000 /* 1일 밀리초로 */)
 
     const dateMoodData = useRef({
         [currentDate]: { // today pie chart data
-            verygood: null, 
-			good: null,
-			normal: null,
-            bad: null,
-			verybad: null
+            verygood: todayData.filter(v => v.category === '매우 좋음').length,
+            good: todayData.filter(v => v.category === '좋음').length,
+            normal: todayData.filter(v => v.category === '보통').length,
+            bad: todayData.filter(v => v.category === '나쁨').length,
+            verybad: todayData.filter(v => v.category === '매우 나쁨').length,
             
 		}
     });
@@ -156,7 +154,7 @@ const DailyChart = ({ navigation }) => {
 				
 				onPressArrowLeft = {substractMonth => substractMonth()}
 				onPressArrowRight = {addMonth => addMonth()}
-				dayComponent = {({ date, state }) => {
+				dayComponent = {({ date }) => {
 					if (!dateMoodData.current[date.dateString]) {
 						dateMoodData.current[date.dateString] = {  /*Math.floor(Math.random()*100): 랜덤데이터*/
 							verygood: Math.floor(Math.random()*100),
@@ -251,16 +249,7 @@ const DailyChart = ({ navigation }) => {
                     data = {moodGraphData}
                 />
             </VictoryChart>
-          {/*}  <VictoryChart>
-                <VictoryBar
-                    style={{ data: { fill: '#bebebe' } }}
-                    animate = {{
-                        duration: 2000,
-                        onLoad: { duration: 1000 }
-                    }}
-                    data = {moodGraphData}
-                />
-                </VictoryChart> */}
+    
     </ScrollView>
   );
 
