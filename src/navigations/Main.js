@@ -2,7 +2,7 @@ import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Home } from '../screens';
-import { ChatList, Chat, ChatSetting, AudioRecording, AudioStorage } from '../screens';
+import { ChatList, Chat, ChatSetting, AudioRecording, AudioStorage, VoiceStorage } from '../screens';
 import { DiaryScreen, DiaryDetail } from '../screens'; 
 import { DailyChart, MonthlyChart } from '../screens';
 import Icon from 'react-native-vector-icons/Ionicons';
@@ -138,7 +138,24 @@ const VoiceChatStack  = () => {
                         return null;
                     },
                 }}
-            />     
+            />
+
+            <Stack.Screen
+                name = "VoiceStorage" 
+                component = {VoiceStorage}
+                options = {{
+                    headerTitle: "음성 불러오기",
+                    headerTintColor: 'white',
+                    headerTitleAlign: 'center',
+                    headerStyle: {
+                        backgroundColor: '#ed847a',
+                    },
+                    headerBackTitleVisible: false,
+                    headerLeft: () => {
+                        return null;
+                    },
+                }}
+            />         
         </Stack.Navigator>
     );
 }

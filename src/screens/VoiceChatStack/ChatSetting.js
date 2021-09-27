@@ -171,7 +171,7 @@ const ChatSetting = ({ navigation }) => {
 
             <TouchableOpacity 
                 style={styles.audioBtn}
-                onPress = {() => navigation.navigate('AudioStorage')}>
+                onPress = {() => navigation.navigate('VoiceStorage')}>
                 <Text style={styles.btnText}>음성 불러오기</Text>
             </TouchableOpacity>
             <TouchableOpacity 

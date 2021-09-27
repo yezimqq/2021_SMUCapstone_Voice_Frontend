@@ -32,6 +32,7 @@ import AngryIcon from '../assets/icons/verybad/05_angry.png';
 import EarIcon from '../assets/custom/ear.png';
 import WaveIcon from '../assets/custom/wave.png';
 import RecordingIcon from '../assets/custom/recording.png';
+import VoiceWaveIcon from '../assets/custom/voicewave.png';
 
 import logo from '../assets/custom/logo.png';
 
@@ -70,6 +71,7 @@ export const images = {
     ear: EarIcon,
     wave: WaveIcon,
     recording: RecordingIcon,
-    logo: logo
+    logo: logo,
+    voicewave: VoiceWaveIcon
 
 };
