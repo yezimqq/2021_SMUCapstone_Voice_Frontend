@@ -2,10 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { Platform, StyleSheet, Text, View, TouchableOpacity, Image, FlatList, Dimensions } from 'react-native'; 
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { DB } from '../../../utils/firebase';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useIsFocused } from "@react-navigation/native";
 
-const ChatList = ({ navigation, route }) => {
+const ChatList = ({ navigation }) => {
     const [channels, setChannels] = useState([]);
+    const isFocused = useIsFocused();
 
     useEffect(() => {
         navigation.setOptions({
@@ -34,72 +36,55 @@ const ChatList = ({ navigation, route }) => {
             ),
         });
 
-        const unsubscribe = DB.collection('channels')
-            .orderBy('createdAt', 'desc')
-            .onSnapshot(snapshot => {
-                const list = [];
-                snapshot.forEach(doc => {
-                    list.push(doc.data());
-                });
-                setChannels(list);
-            });
-        
-        return () => unsubscribe();
-    }, []);
+        console.log('----- ChatList 시작 -----');
+        if (isFocused) {
+            _showList();
+        }
 
-    //GET - chatBot Id로 유저의 챗봇 조회 API 연결
-    const _handleGetChatBotById  = ( chatbotId ) => {
-        async function getChatBotById() {
-            const response = await fetch(`http://13.124.78.167:8080/chat/chatBot/${chatbotId}`, {
+    }, [isFocused]);
+
+    const _showList = () => {
+        async function getChatBot() {
+            const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
                 method: "GET",
                 headers: { 
                     "Authorization" : await AsyncStorage.getItem('Authorization'),
                     "Content-Type" : "application/json",
                 },
-                body: JSON.stringify({
-                    chatBotId: chatbotId,
-                }),
+                body: null,
             });
 
             if (!response.ok) {
                 const message = `An error has occured: ${response.status}`;
                 throw new Error(message);
             }
-            
+                
             const res = await response.json();
             return res;
         };
 
-        getChatBotById().then(async res => {
+        getChatBot().then(async res => {
             console.log("res: ", res);
-        });
-    };
 
-    //DELETE - 챗봇 삭제 API 연결
-    const _handleDeleteChatBot = ( chatbotId ) => {
-        async function deleteChatBot() {
-            const response = await fetch(`http://13.124.78.167:8080/chat/chatBot/${chatbotId}`, {
-                method: "DELETE",
-                headers: { 
-                    "Authorization" : await AsyncStorage.getItem('Authorization'),
-                    "Content-Type" : "application/json",
-                },
-                body: JSON.stringify({
-                    chatBotId: chatbotId,
-                }),
+            
+            const list = [];
+            res.forEach(doc => {
+                console.log("doc: ", doc.imageFile["url"])
+                const imageName = doc.imageFile["url"].toString().substring(29)
+                const imageUrl = ("file:///data/user/0/host.exp.exponent/cache/ExperienceData/UNVERIFIED-192.168.219.118-psycology_consult/ImagePicker/"+imageName);
+                console.log("imageUrl: ", imageUrl)
+                
+
+                list.push({
+                    id: doc.id.toString(),
+                    image: imageUrl,
+                    name: doc.name.toString(),
+                    message: doc.lastChat.toString(),
+                    mode: doc.chatMode["id"],
+                    createdAt: new Date(),
+                });
             });
-
-            if (!response.ok) {
-                const message = `An error has occured: ${response.status}`;
-                throw new Error(message);
-            }
-            
-            const res = await response.json();
-            return res;
-        };
-
-        deleteChatBot().then(async res => {
-            console.log("res: ", res);
+            setChannels(list);
         });
     };
 
@@ -110,13 +95,13 @@ const ChatList = ({ navigation, route }) => {
                 keyExtractor={item=>item.id}
                 renderItem={({item}) => (
                     <TouchableOpacity 
-                        onPress={() => navigation.navigate('Chat', {name: item.name, image: item.image})} 
+                        onPress={() => navigation.navigate('Chat', {id: item.id, name: item.name, image: item.image, mode: item.mode })} 
                         style={styles.chatRoom}>
                         <View style={styles.rowContainer}>
                             <Image source={{ uri: item.image }} style={styles.image} />
                                 <View style={styles.colContainer}>
                                     <Text style={styles.nameText}>{item.name}</Text>
-                                    <Text style={styles.messageText}>{item.message}</Text>   
+                                    <Text style={styles.messageText} numberOfLines={1}>{item.message}</Text>   
                                 </View>
                         </View>
                     </TouchableOpacity>
@@ -175,9 +160,36 @@ const styles = StyleSheet.create({
         marginLeft: 30,
         paddingTop: 10,
         width: 250,
-        opacity: .50,
     }
 
 });
 
 export default ChatList;
+
+    //DELETE - 챗봇 삭제 API 연결
+    const _handleDeleteChatBot = ( chatbotId ) => {
+        async function deleteChatBot() {
+            const response = await fetch(`http://13.124.78.167:8080/chat/chatBot/${chatbotId}`, {
+                method: "DELETE",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    "Content-Type" : "application/json",
+                },
+                body: JSON.stringify({
+                    chatBotId: chatbotId,
+                }),
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        };
+
+        deleteChatBot().then(async res => {
+            console.log("res: ", res);
+        });
+    };
