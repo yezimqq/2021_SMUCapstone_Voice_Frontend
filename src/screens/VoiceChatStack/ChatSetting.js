@@ -3,14 +3,14 @@ import { Platform, StyleSheet, Text, View, Alert, Image, TouchableOpacity, TextI
 import { RadioButton } from 'react-native-paper';
 import * as ImagePicker from 'expo-image-picker';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { createChannel } from '../../../utils/firebase';
 
 const ChatSetting = ({ navigation }) => {
-    //const [id, setId] = useState();
     const [image, setImage] = useState();
     const [name, setName] = useState();
-    const [mode, setMode] = useState('unformal');
-    const [voice, setVoice] = useState();
+    const [mode, setMode] = useState('formal');
+    
+    const [modeId, setModeId] = useState(1); 
+    const [imageFileId, setImageFileId] = useState();
 
     useEffect(() => {
         (async () => {
@@ -21,8 +21,11 @@ const ChatSetting = ({ navigation }) => {
                 }
             }
         })();
-    }, []);
 
+        
+    }, [imageFileId]);
+
+    //Image Picker
     const pickImage = async () => {
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -30,16 +33,58 @@ const ChatSetting = ({ navigation }) => {
             aspect: [4, 3],
             quality: 1,
         });
-    
-        console.log(result);
-    
+
         if (!result.cancelled) {
             setImage(result.uri);
         }
-    };
-    
-    const _handleSaveButton = () => {
+        console.log("이미지 피커 결과\n", result);
         
+        //API에 업로드하기 위한 body 형태로 변경
+        const fileURL = result.uri;
+        const fileName = fileURL.replace("file:///data/user/0/host.exp.exponent/cache/ExperienceData/UNVERIFIED-192.168.219.118-psycology_consult/ImagePicker/","");
+        const fileType = "image/jpg";
+        const file = {
+            uri: fileURL,
+            name: fileName,
+            type: fileType,
+        }
+        const body = new FormData();
+        body.append('file', file)
+
+        _fileUpload(body)
+    };
+
+    //전달 받은 body(파일)를 API에 업로드
+    const _fileUpload = (body) => {
+        async function PostUploadFile() {
+            const response = await fetch("http://13.124.78.167:8080/upload", {
+                method: "POST",
+                headers: { 
+                    "Authorization" : await AsyncStorage.getItem('Authorization'),
+                    'Content-Type': 'multipart/form-data'
+                },
+                body: body,
+            });
+
+            if (!response.ok) {
+                const message = `An error has occured: ${response.status}`;
+                throw new Error(message);
+            }
+            
+            const res = await response.json();
+            return res;
+        }
+
+        PostUploadFile().then(async res => {
+            console.log("\n업로드 res\n", res);
+            console.log("res.result[id]: ", res.result["id"]);
+            setImageFileId(res.result["id"]);
+        });    
+    }
+
+    //확인 버튼 눌렀을 때 작동하는 함수
+    const _handleSaveButton = () => {
+
         if (!image) {
             Alert.alert('','이미지를 선택해주세요.');
             return;
@@ -48,23 +93,23 @@ const ChatSetting = ({ navigation }) => {
             Alert.alert('','이름을 입력해주세요.');
             return;
         }
-        
-        //POST - 챗봇 생성 API 연결 - completed
+
+        //POST - 챗봇 생성 API 연결
         async function fetchSettingStatus() {
+            console.log("ImageFile Id: ", imageFileId);
+            console.log("modeId", modeId);
+
             const response = await fetch("http://13.124.78.167:8080/chat/chatBot", {
                 method: "POST",
                 headers: { 
                     "Authorization" : await AsyncStorage.getItem('Authorization'),
                     "Content-Type" : "application/json",
-
                 },
-
-                //서버에서 id받아와서 지정 해야함 (imageFieldId: 1, modeId: 1 or 2, name: 중복 불가)
                 body: JSON.stringify({
-                    imageFiledId: 1,
-                    modeId: 2,
+                    imageFileId: imageFileId,
+                    modeId: modeId,
                     name: name,
-                    voiceId: 3,
+                    voiceId: 3, //음성 목록 임의 설정
                 }),
             });
 
@@ -79,12 +124,20 @@ const ChatSetting = ({ navigation }) => {
 
         fetchSettingStatus().then(async res => {
             console.log("res: ", res);
-            const id = await createChannel({ image, name });
-            navigation.replace('Chat', { id, name });
-        })       
+            navigation.replace('Chat', { name: name, image: image, mode: modeId });
+        });
+    }
+
+    const _setFormal = () => {
+        setMode('formal');
+        setModeId(1);
+    }
+
+    const _setInformal = () => {
+        setMode('informal');
+        setModeId(2);
     }
     
-
     return (
         <View style = {styles.container}>   
             
@@ -103,17 +156,17 @@ const ChatSetting = ({ navigation }) => {
             
             <View style={styles.radioContainer}>
                 <RadioButton
-                    value='unformal'
-                    status={mode === 'unformal' ? 'checked' : 'unchecked'}
-                    onPress={() => setMode('unformal')}
-                />
-                <Text style={styles.radioText}>반말</Text>
-                <RadioButton
                     value='formal'
                     status={mode === 'formal' ? 'checked' : 'unchecked'}
-                    onPress={() => setMode('formal')}
+                    onPress={_setFormal}
                 />
                 <Text style={styles.radioText}>존댓말</Text>
+                <RadioButton
+                    value='informal'
+                    status={mode === 'informal' ? 'checked' : 'unchecked'}
+                    onPress={_setInformal}
+                />
+                <Text style={styles.radioText}>반말</Text>
             </View>
 
             <TouchableOpacity 
@@ -211,3 +264,85 @@ const styles = StyleSheet.create({
 });
 
 export default ChatSetting;
+
+//GET - 어체 조회 API 연결
+const _handleGetMode = () => {
+    async function getMode() {
+        const response = await fetch("http://13.124.78.167:8080/chat/mode", {
+            method: "GET",
+            headers: { 
+                "Authorization" : await AsyncStorage.getItem('Authorization'),
+                "Content-Type" : "application/json",
+            },
+            body: null,
+        });
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+        
+        const res = await response.json();
+        return res;
+    };
+
+    getMode().then(async res => {
+        console.log("res: ", res);
+    });
+};
+
+//GET - 음성 조회 API 연결
+const _handleGetVoice = () => {
+    async function getVoice() {
+        const response = await fetch("http://13.124.78.167:8080/chat/voice", {
+            method: "GET",
+            headers: { 
+                "Authorization" : await AsyncStorage.getItem('Authorization'),
+                "Content-Type" : "application/json",
+            },
+            body: null,
+        });
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+        
+        const res = await response.json();
+        return res;
+    };
+
+    getVoice().then(async res => {
+        console.log("res: ", res);
+    });
+};
+
+//모두 조회 후 설정
+const _handlegetMode = () => {
+    async function getMode() {
+        const response = await fetch("http://13.124.78.167:8080/chat/mode", {
+            method: "GET",
+            headers: { 
+                "Authorization" : await AsyncStorage.getItem('Authorization'),
+                "Content-Type" : "application/json",
+            },
+            body: null,
+        });
+
+        if (!response.ok) {
+            const message = `An error has occured: ${response.status}`;
+            throw new Error(message);
+        }
+                
+        const res = await response.json();
+        return res;
+    };
+        
+    getMode().then(async res => {ㄴ
+        console.log("getMode의 res\n ", res);
+        res.forEach(doc => {
+            if (doc.name === mode)
+                setModeId(doc.id)
+        });
+    });
+}
