@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from "react";
 import { SwipeListView } from "react-native-swipe-list-view";
-import { View, Text, StyleSheet, Animated, Dimensions, TouchableHighlight, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Animated, Dimensions, TouchableHighlight, TouchableOpacity, ActivityIndicator, Alert } from "react-native";
 import Icon from 'react-native-vector-icons/AntDesign';
 import TabIcon from 'react-native-vector-icons/Foundation'
 import { Audio } from "expo-av";
 import { documentDirectory, readDirectoryAsync as fsReadDirectoryAsync, deleteAsync } from "expo-file-system";
 import * as DocumentPicker from 'expo-document-picker';
+
 
 const AudioStorage = ({ navigation }) => {
     /* make directory in app 
@@ -74,10 +75,10 @@ const AudioStorage = ({ navigation }) => {
                 uri: recordingFileName,
             });
             await soundObject.playAsync();
-            // Your sound is playing!
+            // 녹음된 음성 재생
         } catch (error) {
                 console.error(error);
-            // An error occurred!
+            
         }
     };
 
@@ -118,7 +119,7 @@ const AudioStorage = ({ navigation }) => {
     };
     
     const renderItem = (data) => {
-        return (
+        return ( 
             <Animated.View
                 style={[
                     styles.rowFrontContainer,
@@ -143,7 +144,8 @@ const AudioStorage = ({ navigation }) => {
                             style = {{marginLeft: 15, marginRight: 30}}
                         />
                         <Text>{data.item.text}</Text>
-                    </View>
+                       
+                    </View> 
                 </TouchableHighlight>
             </Animated.View>
         );
@@ -156,6 +158,22 @@ const AudioStorage = ({ navigation }) => {
             </View>
         </View>
     );
+
+    
+   const [training, setTraining] = useState(false);
+
+   const startTraining = () => {
+       setTraining(true);
+      /* setTimeout(()=> {
+           setTraining(false)}, 5000);
+       setTimeout(() => {
+         Alert.alert('', '학습 완료')}, 5000); */
+   }
+
+   const stopTraining = () => {
+       setTraining(false);
+   }
+
 
     {/* ----- can upload audio file(invisible) ----- */}
     const uploadFile = async() => {
@@ -198,7 +216,7 @@ const AudioStorage = ({ navigation }) => {
 
     return (
         <View style={styles.container}>
-            {isLoading && <Text>Loading......</Text>}
+            {isLoading && <Text>로딩 중</Text>}
             {!isLoading && (
                 <SwipeListView
                     style = {styles.swipeListContainer}
@@ -211,11 +229,25 @@ const AudioStorage = ({ navigation }) => {
                     useNativeDriver = {false}
                 />
             )}
-            <TouchableOpacity style={styles.trainBtn}>
-                <Text 
-                    style = {styles.btnText}
-                    onPress = {() => alert('음성 학습하기')}>음성 학습하기</Text>
-            </TouchableOpacity>
+           
+           {training? (
+            <TouchableOpacity 
+                style={styles.trainBtn}
+                onPress = {stopTraining}
+            >
+                <ActivityIndicator
+                    visible = {training}
+                    color = 'white'
+                    style = {{marginRight: 10}} />
+                <Text style = {styles.btnText}> 음성 학습 중 </Text>
+            </TouchableOpacity>) 
+            :
+            <TouchableOpacity 
+                style={styles.trainBtn}
+                onPress={startTraining} >    
+                <Text style = {styles.btnText}>음성 학습하기</Text>  
+            </TouchableOpacity> }
+            
             <View style = {styles.tab}>
                 <TouchableOpacity 
                     style = {styles.tabContainer} 
@@ -322,7 +354,8 @@ const styles = StyleSheet.create({
         marginBottom: 15,
         shadowColor: 'rgba(0, 0, 0, 0.5)',
         shadowOpacity: 2,
-        shadowOffset: {width:2, height:2}
+        shadowOffset: {width:2, height:2},
+        flexDirection: 'row'
     },
 
     btnText: {
