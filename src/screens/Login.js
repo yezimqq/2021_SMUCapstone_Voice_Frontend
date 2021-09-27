@@ -35,7 +35,6 @@ const Login = ({ navigation }) => {
         
         if (json.success !== null) {
             AsyncStorage.setItem('Authorization', headers.get("Authorization"));
-            Alert.alert('', '로그인 성공!');
             dispatch({ LoginId: id, password: password });
         }
         else {
