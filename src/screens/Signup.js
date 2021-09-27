@@ -39,8 +39,6 @@ const Signup = ({ navigation }) => {
             if (res.error) 
                 Alert.alert('', '이미 가입된 회원입니다');
             else {
-                dispatch({ LoginId: id, password: password })
-                Alert.alert('', '가입 완료');
                 navigation.navigate('Login');
             }
         })
